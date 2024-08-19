@@ -18,7 +18,7 @@ export function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   return (
-    <div className="border border-red-500 rounded-md max-w-[1500px] m-auto">
+    <div className="m-auto max-w-[1500px] rounded-md border border-red-500">
       <Navigation
         currentMonth={currentMonth}
         setCurrentMonth={setCurrentMonth}
@@ -47,8 +47,8 @@ function Navigation({
   };
 
   return (
-    <nav className="flex items-center gap-4 my-4 ml-4">
-      <button className="px-4 py-1 border rounded-md hover:bg-gray-400">
+    <nav className="my-4 ml-4 flex items-center gap-4">
+      <button className="rounded-md border px-4 py-1 hover:bg-gray-400">
         Today
       </button>
       <button onClick={handlePreviousMonth}>&lt;</button>
@@ -85,7 +85,7 @@ function Month({ currentMonth }: { currentMonth: Date }) {
           return (
             <div
               key={index}
-              className={`p-4 border rounded ${backgroundClass} ${opacityClass}`}
+              className={`rounded border p-4 ${backgroundClass} ${opacityClass}`}
             >
               {format(day, "d")}
             </div>
