@@ -15,10 +15,15 @@ import {
 import { useState } from "react";
 
 export function Calendar() {
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
   return (
     <div className="border border-red-500 rounded-md max-w-[1500px] m-auto">
-      <Navigation />
-      <Month />
+      <Navigation
+        currentMonth={currentMonth}
+        setCurrentMonth={setCurrentMonth}
+      />
+      <Month currentMonth={currentMonth} />
       <AddEventModal />
       <EventDetailsModal />
       <ViewMoreModal />
@@ -26,22 +31,34 @@ export function Calendar() {
   );
 }
 
-function Navigation() {
+function Navigation({
+  currentMonth,
+  setCurrentMonth,
+}: {
+  currentMonth: Date;
+  setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
+}) {
+  const handlePreviousMonth = () => {
+    setCurrentMonth(subMonths(currentMonth, 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentMonth(addMonths(currentMonth, 1));
+  };
+
   return (
     <nav className="flex items-center gap-4 my-4 ml-4">
       <button className="px-4 py-1 border rounded-md hover:bg-gray-400">
         Today
       </button>
-      <button>&lt;</button>
-      <button>&gt;</button>
-      {/* <span className="font-semibold">{format(today, "MMMM yyyy")}</span> */}
+      <button onClick={handlePreviousMonth}>&lt;</button>
+      <button onClick={handleNextMonth}>&gt;</button>
+      <span className="font-semibold">{format(currentMonth, "MMMM yyyy")}</span>
     </nav>
   );
 }
 
-function Month() {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-
+function Month({ currentMonth }: { currentMonth: Date }) {
   const today = new Date();
   const startDate = startOfMonth(currentMonth);
   const endDate = endOfMonth(currentMonth);
@@ -54,14 +71,6 @@ function Month() {
     days.push(day);
     day = addDays(day, 1);
   }
-
-  const handlePreviousMonth = () => {
-    setCurrentMonth(subMonths(currentMonth, 1));
-  };
-
-  const handleNextMonth = () => {
-    setCurrentMonth(addMonths(currentMonth, 1));
-  };
 
   return (
     <main className="p-4">
