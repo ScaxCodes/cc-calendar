@@ -48,7 +48,10 @@ function Navigation({
 
   return (
     <nav className="my-4 ml-4 flex items-center gap-4">
-      <button className="rounded-md border px-4 py-1 hover:bg-gray-400">
+      <button
+        onClick={() => setCurrentMonth(new Date())}
+        className="rounded-md border px-4 py-1 hover:bg-gray-400"
+      >
         Today
       </button>
       <button onClick={handlePreviousMonth}>&lt;</button>
