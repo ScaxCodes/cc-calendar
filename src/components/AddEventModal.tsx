@@ -155,9 +155,9 @@ export function AddEventModal({
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full rounded bg-blue-500 py-2 text-white hover:bg-blue-600"
+            className="bg-add-button-bg text-add-button-text hover:bg-add-button-bg-hover border-add-button-border w-full rounded border py-2"
           >
-            Add Event
+            Add
           </button>
         </form>
       </div>
