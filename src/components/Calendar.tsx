@@ -160,7 +160,11 @@ function Events({ eventsForDay }: { eventsForDay: EventForm[] }) {
   return (
     <>
       {eventsForDay.map((singleEvent) => {
-        return <div>{singleEvent.name}</div>;
+        return (
+          <div className={`bg-custom-${singleEvent.color}`}>
+            {singleEvent.name}
+          </div>
+        );
       })}
     </>
   );
