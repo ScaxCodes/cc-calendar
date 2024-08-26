@@ -88,9 +88,14 @@ function Month({ currentMonth }: { currentMonth: Date }) {
           return (
             <div
               key={index}
-              className={`rounded border p-4 ${backgroundClass} ${opacityClass}`}
+              className={`group relative rounded border p-4 text-center ${backgroundClass} ${opacityClass}`}
             >
+              {/* Render headers for the first row of the calendar */}
               <div>{index <= 6 && format(day, "EEE").toUpperCase()}</div>
+
+              <button className="absolute right-0 top-0 m-1 hidden h-6 w-6 rounded-full bg-blue-500 text-white hover:bg-blue-600 group-hover:block">
+                +
+              </button>
               <div>{format(day, "d")}</div>
             </div>
           );
