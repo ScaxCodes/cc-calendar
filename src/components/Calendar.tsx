@@ -18,7 +18,7 @@ export function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   return (
-    <div className="m-auto max-w-[1500px] rounded-md border border-red-500">
+    <div className="m-auto flex h-screen max-w-[1500px] flex-col rounded-md border border-red-500">
       <Navigation
         currentMonth={currentMonth}
         setCurrentMonth={setCurrentMonth}
@@ -73,8 +73,8 @@ function Month({ currentMonth }: { currentMonth: Date }) {
   }
 
   return (
-    <main className="p-4">
-      <div className="grid grid-cols-7 gap-2">
+    <main className="flex flex-1 flex-col p-4">
+      <div className="grid flex-1 grid-cols-7 gap-2">
         {days.map((day, index) => {
           const isCurrentMonth = isSameMonth(day, currentMonth);
           const isInPast = isBefore(day, today) && !isToday(day);
