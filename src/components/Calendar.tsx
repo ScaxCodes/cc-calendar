@@ -28,7 +28,7 @@ export function Calendar() {
       <Month currentMonth={currentMonth} setSelectedDate={setSelectedDate} />
       {selectedDate && (
         <AddEventModal
-          // selectedDate={selectedDate}
+          selectedDate={selectedDate}
           onSubmit={(e) => console.log(e)}
           onClose={() => setSelectedDate(null)}
         />

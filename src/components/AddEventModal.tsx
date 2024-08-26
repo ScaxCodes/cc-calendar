@@ -9,9 +9,11 @@ type EventForm = {
 };
 
 export function AddEventModal({
+  selectedDate,
   onClose,
   onSubmit,
 }: {
+  selectedDate: string;
   onClose: () => void;
   onSubmit: (event: EventForm) => void;
 }) {
@@ -41,8 +43,16 @@ export function AddEventModal({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="rounded bg-white p-6 shadow-lg">
-        <h2 className="mb-4 text-xl font-semibold">Add New Event</h2>
-
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-xl font-semibold">Add Event</h2>
+          <span>{selectedDate}</span>
+          <button onClick={onClose}>
+            <img
+              src="https://www.svgrepo.com/show/513658/cross.svg"
+              className="w-4"
+            ></img>
+          </button>
+        </div>
         <form onSubmit={handleSubmit}>
           {/* Event Name */}
           <div className="mb-4">
@@ -146,13 +156,6 @@ export function AddEventModal({
             Add Event
           </button>
         </form>
-
-        <button
-          className="mt-4 w-full rounded bg-gray-300 py-2 text-gray-800 hover:bg-gray-400"
-          onClick={onClose}
-        >
-          Close
-        </button>
       </div>
     </div>
   );
