@@ -13,11 +13,20 @@ import {
 } from "date-fns";
 
 import { useState } from "react";
-import { AddEventModal } from "./AddEventModal";
+import { EventForm, AddEventModal } from "./AddEventModal";
 
 export function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [events, setEvents] = useState<EventForm[]>([]);
+
+  // Only for debugging
+  console.log("Event state after re-render: ", events);
+
+  function handleSubmitEvent(eventForm: EventForm) {
+    const allEvents = [...events, eventForm];
+    setEvents(allEvents);
+  }
 
   return (
     <div className="m-auto flex h-screen max-w-[1500px] flex-col rounded-md border border-red-500">
@@ -29,7 +38,7 @@ export function Calendar() {
       {selectedDate && (
         <AddEventModal
           selectedDate={selectedDate}
-          onSubmit={(e) => console.log(e)}
+          onSubmit={handleSubmitEvent}
           onClose={() => setSelectedDate(null)}
         />
       )}

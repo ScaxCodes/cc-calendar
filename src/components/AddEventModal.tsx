@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-type EventForm = {
+export type EventForm = {
   name: string;
   allDay: boolean;
   startTime: string;
