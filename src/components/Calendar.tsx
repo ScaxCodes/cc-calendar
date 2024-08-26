@@ -40,7 +40,11 @@ export function Calendar() {
         currentMonth={currentMonth}
         setCurrentMonth={setCurrentMonth}
       />
-      <Month currentMonth={currentMonth} setSelectedDate={setSelectedDate} />
+      <Month
+        currentMonth={currentMonth}
+        setSelectedDate={setSelectedDate}
+        events={events}
+      />
       {selectedDate && (
         <AddEventModal
           selectedDate={selectedDate}
@@ -87,9 +91,11 @@ function Navigation({
 function Month({
   currentMonth,
   setSelectedDate,
+  events,
 }: {
   currentMonth: Date;
   setSelectedDate: React.Dispatch<React.SetStateAction<string | null>>;
+  events: EventsByDate;
 }) {
   const today = new Date();
   const startDate = startOfMonth(currentMonth);
@@ -122,11 +128,14 @@ function Month({
           const backgroundClass = isCurrentMonth ? "bg-white" : "bg-gray-200";
           const opacityClass = isInPast ? "opacity-50" : "opacity-100";
 
+          const dayISO = format(day, "yyyy-MM-dd");
+          const eventsForDay = events[dayISO];
+
           return (
             <div
               key={index}
               className={`group relative rounded border p-4 text-center ${backgroundClass} ${opacityClass}`}
-              data-date={format(day, "yyyy-MM-dd")}
+              data-date={dayISO}
             >
               {/* Render headers for the first row of the calendar */}
               <div>{index <= 6 && format(day, "EEE").toUpperCase()}</div>
@@ -138,11 +147,22 @@ function Month({
                 +
               </button>
               <div>{format(day, "d")}</div>
+              {eventsForDay && <Events eventsForDay={eventsForDay} />}
             </div>
           );
         })}
       </div>
     </main>
+  );
+}
+
+function Events({ eventsForDay }: { eventsForDay: EventForm[] }) {
+  return (
+    <>
+      {eventsForDay.map((singleEvent) => {
+        return <div>{singleEvent.name}</div>;
+      })}
+    </>
   );
 }
 
