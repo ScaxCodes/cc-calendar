@@ -42,7 +42,7 @@ export function AddEventModal({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="rounded bg-white p-6 shadow-lg">
+      <div className="w-96 rounded bg-white p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold">Add Event</h2>
           <span>{selectedDate}</span>
