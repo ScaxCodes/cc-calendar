@@ -13,6 +13,7 @@ import {
 } from "date-fns";
 
 import { useState } from "react";
+import { AddEventModal } from "./AddEventModal";
 
 export function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -27,7 +28,8 @@ export function Calendar() {
       <Month currentMonth={currentMonth} setSelectedDate={setSelectedDate} />
       {selectedDate && (
         <AddEventModal
-          selectedDate={selectedDate}
+          // selectedDate={selectedDate}
+          onSubmit={(e) => console.log(e)}
           onClose={() => setSelectedDate(null)}
         />
       )}
@@ -126,25 +128,6 @@ function Month({
         })}
       </div>
     </main>
-  );
-}
-
-function AddEventModal({
-  selectedDate,
-  onClose,
-}: {
-  selectedDate: string;
-  onClose: () => void;
-}) {
-  return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <div className="rounded bg-white p-4">
-        <h2 className="text-lg font-semibold">Add Event on {selectedDate}</h2>
-        <button onClick={onClose} className="mt-4 text-blue-500">
-          Close
-        </button>
-      </div>
-    </div>
   );
 }
 
