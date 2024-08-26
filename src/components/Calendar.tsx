@@ -88,7 +88,7 @@ function Month({ currentMonth }: { currentMonth: Date }) {
           return (
             <div
               key={index}
-              className={`group relative rounded border p-4 text-center ${backgroundClass} ${opacityClass}`}
+              className={`group relative rounded border p-4 text-center ${backgroundClass} ${opacityClass} data-date=${format(day, "P")}`}
             >
               {/* Render headers for the first row of the calendar */}
               <div>{index <= 6 && format(day, "EEE").toUpperCase()}</div>
