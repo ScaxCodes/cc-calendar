@@ -76,24 +76,28 @@ export function AddEventModal({
           </div>
 
           {/* Start Time */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium">Start Time</label>
-            <input
-              type="time"
-              ref={startTimeRef}
-              className="mt-1 rounded border p-2"
-              disabled={allDay}
-              required={!allDay}
-            />
+          <div className="mb-4 flex justify-between gap-2">
+            <div className="w-full">
+              <label className="block text-sm font-medium">Start Time</label>
+              <input
+                type="time"
+                ref={startTimeRef}
+                className="mt-1 w-full rounded border p-2"
+                disabled={allDay}
+                required={!allDay}
+              />
+            </div>
             {/* End Time */}
-            <label className="block text-sm font-medium">End Time</label>
-            <input
-              type="time"
-              ref={endTimeRef}
-              className="mt-1 rounded border p-2"
-              disabled={allDay}
-              required={!allDay}
-            />
+            <div className="w-full">
+              <label className="block text-sm font-medium">End Time</label>
+              <input
+                type="time"
+                ref={endTimeRef}
+                className="mt-1 w-full rounded border p-2"
+                disabled={allDay}
+                required={!allDay}
+              />
+            </div>
           </div>
 
           {/* Color */}
