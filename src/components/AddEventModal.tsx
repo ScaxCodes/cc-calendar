@@ -114,23 +114,8 @@ export function AddEventModal({
                   className="hidden"
                 />
                 <span
-                  className={`block h-8 w-8 rounded-sm bg-red-500 ${
+                  className={`bg-custom-red block h-8 w-8 rounded-sm ${
                     selectedColor === "red" ? "opacity-100" : "opacity-50"
-                  }`}
-                ></span>
-              </label>
-              {/* Blue Square */}
-              <label className="cursor-pointer">
-                <input
-                  type="radio"
-                  value="blue"
-                  checked={selectedColor === "blue"}
-                  onChange={() => setSelectedColor("blue")}
-                  className="hidden"
-                />
-                <span
-                  className={`block h-8 w-8 rounded-sm bg-blue-500 ${
-                    selectedColor === "blue" ? "opacity-100" : "opacity-50"
                   }`}
                 ></span>
               </label>
@@ -144,8 +129,23 @@ export function AddEventModal({
                   className="hidden"
                 />
                 <span
-                  className={`block h-8 w-8 rounded-sm bg-green-500 ${
+                  className={`bg-custom-green block h-8 w-8 rounded-sm ${
                     selectedColor === "green" ? "opacity-100" : "opacity-50"
+                  }`}
+                ></span>
+              </label>
+              {/* Blue Square */}
+              <label className="cursor-pointer">
+                <input
+                  type="radio"
+                  value="blue"
+                  checked={selectedColor === "blue"}
+                  onChange={() => setSelectedColor("blue")}
+                  className="hidden"
+                />
+                <span
+                  className={`bg-custom-blue block h-8 w-8 rounded-sm ${
+                    selectedColor === "blue" ? "opacity-100" : "opacity-50"
                   }`}
                 ></span>
               </label>
