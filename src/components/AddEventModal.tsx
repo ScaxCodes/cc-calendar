@@ -15,7 +15,7 @@ export function AddEventModal({
 }: {
   selectedDate: string;
   onClose: () => void;
-  onSubmit: (event: EventForm) => void;
+  onSubmit: (date: string, event: EventForm) => void;
 }) {
   // State for "All Day" checkbox
   const [allDay, setAllDay] = useState(false);
@@ -36,7 +36,7 @@ export function AddEventModal({
       endTime: allDay ? "" : endTimeRef.current?.value || "",
       color: selectedColor, // Get selected color from state
     };
-    onSubmit(eventForm);
+    onSubmit(selectedDate, eventForm);
     onClose(); // Close modal after submission
   };
 

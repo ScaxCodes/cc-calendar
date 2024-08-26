@@ -12,20 +12,26 @@ import {
   addMonths,
 } from "date-fns";
 
+type EventsByDate = {
+  [date: string]: EventForm[]; // The key is a string representing the date
+};
+
 import { useState } from "react";
 import { EventForm, AddEventModal } from "./AddEventModal";
 
 export function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [events, setEvents] = useState<EventForm[]>([]);
+  const [events, setEvents] = useState<EventsByDate>({});
 
   // Only for debugging
   console.log("Event state after re-render: ", events);
 
-  function handleSubmitEvent(eventForm: EventForm) {
-    const allEvents = [...events, eventForm];
-    setEvents(allEvents);
+  function handleSubmitEvent(date: string, eventForm: EventForm) {
+    setEvents((prevEvents) => ({
+      ...prevEvents,
+      [date]: prevEvents[date] ? [...prevEvents[date], eventForm] : [eventForm],
+    }));
   }
 
   return (
@@ -120,7 +126,7 @@ function Month({
             <div
               key={index}
               className={`group relative rounded border p-4 text-center ${backgroundClass} ${opacityClass}`}
-              data-date={format(day, "P")}
+              data-date={format(day, "yyyy-MM-dd")}
             >
               {/* Render headers for the first row of the calendar */}
               <div>{index <= 6 && format(day, "EEE").toUpperCase()}</div>
