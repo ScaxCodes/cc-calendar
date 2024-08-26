@@ -90,7 +90,8 @@ function Month({ currentMonth }: { currentMonth: Date }) {
               key={index}
               className={`rounded border p-4 ${backgroundClass} ${opacityClass}`}
             >
-              {format(day, "d")}
+              <div>{index <= 6 && format(day, "EEE").toUpperCase()}</div>
+              <div>{format(day, "d")}</div>
             </div>
           );
         })}
