@@ -156,12 +156,19 @@ function Month({
   );
 }
 
+// TODO #1: Events should be sorted with all day events first and then by start date.
+// TODO #2: Style non-all-day-events differently
+
 function Events({ eventsForDay }: { eventsForDay: EventForm[] }) {
+  const eventsForDayAllDay = eventsForDay.filter((e) => e.allDay === true);
+  const eventsForDayPartDay = eventsForDay.filter((e) => e.allDay === false);
+  const eventsForDaySorted = [...eventsForDayAllDay, ...eventsForDayPartDay];
+
   return (
     <>
-      {eventsForDay.map((singleEvent) => {
+      {eventsForDaySorted.map((singleEvent, index) => {
         return (
-          <div className={`bg-custom-${singleEvent.color}`}>
+          <div key={index} className={`bg-custom-${singleEvent.color}`}>
             {singleEvent.name}
           </div>
         );
