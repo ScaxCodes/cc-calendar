@@ -168,11 +168,23 @@ function Events({ eventsForDay }: { eventsForDay: EventForm[] }) {
   return (
     <>
       {eventsForDaySorted.map((singleEvent, index) => {
-        return (
-          <div key={index} className={`bg-custom-${singleEvent.color}`}>
-            {singleEvent.name}
-          </div>
-        );
+        if (singleEvent.allDay) {
+          return (
+            <div key={index} className={`bg-custom-${singleEvent.color}`}>
+              {singleEvent.name}
+            </div>
+          );
+        } else {
+          return (
+            <div className="flex items-center" key={index}>
+              <div
+                className={`bg-custom-${singleEvent.color} mr-3 h-3 w-3 rounded-full`}
+              ></div>
+              <div className="mr-1">{singleEvent.startTime}</div>
+              <div>{singleEvent.name}</div>
+            </div>
+          );
+        }
       })}
     </>
   );
