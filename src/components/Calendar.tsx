@@ -156,13 +156,19 @@ function Month({
   );
 }
 
-// TODO #1: Events should be sorted with all day events first and then by start date.
-// TODO #2: Style non-all-day-events differently
-
 function Events({ eventsForDay }: { eventsForDay: EventForm[] }) {
-  // Sort events: allDay events come first, followed by part-day events
   const eventsForDaySorted = eventsForDay.sort((a, b) => {
-    return a.allDay === b.allDay ? 0 : a.allDay ? -1 : 1;
+    // All-day events come first
+    if (a.allDay && !b.allDay) return -1;
+    if (!a.allDay && b.allDay) return 1;
+
+    // If both are part-day events, sort by startTime
+    if (!a.allDay && !b.allDay) {
+      return a.startTime.localeCompare(b.startTime);
+    }
+
+    // If both are all-day events, maintain their order
+    return 0;
   });
 
   return (
