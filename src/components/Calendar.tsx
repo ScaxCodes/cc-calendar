@@ -160,9 +160,10 @@ function Month({
 // TODO #2: Style non-all-day-events differently
 
 function Events({ eventsForDay }: { eventsForDay: EventForm[] }) {
-  const eventsForDayAllDay = eventsForDay.filter((e) => e.allDay === true);
-  const eventsForDayPartDay = eventsForDay.filter((e) => e.allDay === false);
-  const eventsForDaySorted = [...eventsForDayAllDay, ...eventsForDayPartDay];
+  // Sort events: allDay events come first, followed by part-day events
+  const eventsForDaySorted = eventsForDay.sort((a, b) => {
+    return a.allDay === b.allDay ? 0 : a.allDay ? -1 : 1;
+  });
 
   return (
     <>
