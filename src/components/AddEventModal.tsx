@@ -6,6 +6,7 @@ export type EventForm = {
   startTime: string;
   endTime: string;
   color: string;
+  id: string;
 };
 
 export function AddEventModal({
@@ -35,6 +36,7 @@ export function AddEventModal({
       startTime: allDay ? "" : startTimeRef.current?.value || "",
       endTime: allDay ? "" : endTimeRef.current?.value || "",
       color: selectedColor, // Get selected color from state
+      id: crypto.randomUUID(),
     };
     onSubmit(selectedDate, eventForm);
     onClose(); // Close modal after submission

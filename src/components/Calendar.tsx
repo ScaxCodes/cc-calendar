@@ -173,16 +173,19 @@ function Events({ eventsForDay }: { eventsForDay: EventForm[] }) {
 
   return (
     <>
-      {eventsForDaySorted.map((singleEvent, index) => {
+      {eventsForDaySorted.map((singleEvent) => {
         if (singleEvent.allDay) {
           return (
-            <div key={index} className={`bg-custom-${singleEvent.color}`}>
+            <div
+              key={singleEvent.id}
+              className={`bg-custom-${singleEvent.color}`}
+            >
               {singleEvent.name}
             </div>
           );
         } else {
           return (
-            <div className="flex items-center" key={index}>
+            <div className="flex items-center" key={singleEvent.id}>
               <div
                 className={`bg-custom-${singleEvent.color} mr-3 h-3 w-3 rounded-full`}
               ></div>
@@ -195,6 +198,10 @@ function Events({ eventsForDay }: { eventsForDay: EventForm[] }) {
     </>
   );
 }
+
+// Clicking on an event should open an edit modal.
+// This modal should have the same fields as the add event modal but should be pre-populated with the event data.
+// This modal should also have a delete button for removing an event.
 
 function EventDetailsModal() {
   return "";
