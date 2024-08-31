@@ -1,45 +1,40 @@
-import { useRef, useState } from "react";
-
-export type EventForm = {
-  name: string;
-  allDay: boolean;
-  startTime: string;
-  endTime: string;
-  color: string;
-  id: string;
-};
+import React, { useRef, useState } from "react";
+import { useEvents, EventForm } from "../contexts/EventContext";
 
 export function AddEventModal({
   selectedDate,
   onClose,
-  onSubmit,
 }: {
   selectedDate: string;
   onClose: () => void;
-  onSubmit: (date: string, event: EventForm) => void;
 }) {
-  // State for "All Day" checkbox
-  const [allDay, setAllDay] = useState(false);
-  // State for selected color
-  const [selectedColor, setSelectedColor] = useState<string>("red");
+  const { addEvent } = useEvents();
 
-  // Refs for form fields
+  // Using useRef for fields that don't need to trigger re-renders
   const nameRef = useRef<HTMLInputElement>(null);
   const startTimeRef = useRef<HTMLInputElement>(null);
   const endTimeRef = useRef<HTMLInputElement>(null);
 
+  // State for fields that require reactivity
+  const [allDay, setAllDay] = useState(false);
+  const [selectedColor, setSelectedColor] = useState("red");
+
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const eventForm: EventForm = {
-      name: nameRef.current?.value || "",
+
+    const newEvent: EventForm = {
+      id: Date.now().toString(),
+      name: nameRef.current?.value || "", // Getting value from ref
       allDay,
       startTime: allDay ? "" : startTimeRef.current?.value || "",
       endTime: allDay ? "" : endTimeRef.current?.value || "",
-      color: selectedColor, // Get selected color from state
-      id: crypto.randomUUID(),
+      color: selectedColor,
     };
-    onSubmit(selectedDate, eventForm);
-    onClose(); // Close modal after submission
+
+    // Add event via context method
+    addEvent(selectedDate, newEvent);
+    onClose(); // Close modal after adding the event
   };
 
   return (
@@ -52,7 +47,8 @@ export function AddEventModal({
             <img
               src="https://www.svgrepo.com/show/513658/cross.svg"
               className="w-4"
-            ></img>
+              alt="Close"
+            />
           </button>
         </div>
         <form onSubmit={handleSubmit}>
@@ -61,96 +57,66 @@ export function AddEventModal({
             <label className="text-sm font-medium">Name</label>
             <input
               type="text"
-              ref={nameRef}
+              ref={nameRef} // Using ref instead of state
               className="mt-1 w-full rounded border p-2"
               required
             />
           </div>
 
-          {/* All Day? */}
+          {/* All Day Checkbox */}
           <div className="mb-4">
             <input
               type="checkbox"
               checked={allDay}
-              onChange={() => setAllDay((prev) => !prev)}
+              onChange={() => setAllDay((prev) => !prev)} // Still using state for allDay
             />
             <label className="ml-2 text-sm font-medium">All Day?</label>
           </div>
 
-          {/* Start Time */}
+          {/* Start Time and End Time */}
           <div className="mb-4 flex justify-between gap-2">
             <div className="w-full">
               <label className="block text-sm font-medium">Start Time</label>
               <input
                 type="time"
-                ref={startTimeRef}
+                ref={startTimeRef} // Using ref instead of state
                 className="mt-1 w-full rounded border p-2"
-                disabled={allDay}
+                disabled={allDay} // Disable if allDay is true
                 required={!allDay}
               />
             </div>
-            {/* End Time */}
             <div className="w-full">
               <label className="block text-sm font-medium">End Time</label>
               <input
                 type="time"
-                ref={endTimeRef}
+                ref={endTimeRef} // Using ref instead of state
                 className="mt-1 w-full rounded border p-2"
-                disabled={allDay}
+                disabled={allDay} // Disable if allDay is true
                 required={!allDay}
               />
             </div>
           </div>
 
-          {/* Color */}
+          {/* Color Selection */}
           <div className="mb-4">
             <label className="text-sm font-medium">Color</label>
             <div className="mt-2 flex items-center gap-4">
-              {/* Red Square */}
-              <label className="cursor-pointer">
-                <input
-                  type="radio"
-                  value="red"
-                  checked={selectedColor === "red"}
-                  onChange={() => setSelectedColor("red")}
-                  className="hidden"
-                />
-                <span
-                  className={`bg-custom-red block h-8 w-8 rounded-sm ${
-                    selectedColor === "red" ? "opacity-100" : "opacity-50"
-                  }`}
-                ></span>
-              </label>
-              {/* Green Square */}
-              <label className="cursor-pointer">
-                <input
-                  type="radio"
-                  value="green"
-                  checked={selectedColor === "green"}
-                  onChange={() => setSelectedColor("green")}
-                  className="hidden"
-                />
-                <span
-                  className={`bg-custom-green block h-8 w-8 rounded-sm ${
-                    selectedColor === "green" ? "opacity-100" : "opacity-50"
-                  }`}
-                ></span>
-              </label>
-              {/* Blue Square */}
-              <label className="cursor-pointer">
-                <input
-                  type="radio"
-                  value="blue"
-                  checked={selectedColor === "blue"}
-                  onChange={() => setSelectedColor("blue")}
-                  className="hidden"
-                />
-                <span
-                  className={`bg-custom-blue block h-8 w-8 rounded-sm ${
-                    selectedColor === "blue" ? "opacity-100" : "opacity-50"
-                  }`}
-                ></span>
-              </label>
+              {["red", "green", "blue"].map((color) => (
+                <label className="cursor-pointer" key={color}>
+                  <input
+                    type="radio"
+                    value={color}
+                    checked={selectedColor === color}
+                    onChange={() => setSelectedColor(color)}
+                    className="hidden"
+                  />
+                  <span
+                    className={`bg-custom-${color} block h-8 w-8 rounded-sm ${
+                      selectedColor === color ? "opacity-100" : "opacity-50"
+                    }`}
+                  ></span>
+                </label>
+              ))}
             </div>
           </div>
 
