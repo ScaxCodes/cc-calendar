@@ -15,9 +15,11 @@ import { useEvents } from "../contexts/EventContext";
 export default function Month({
   currentMonth,
   setSelectedDate,
+  setIsAddEventModalOpen,
 }: {
   currentMonth: Date;
   setSelectedDate: React.Dispatch<React.SetStateAction<string | null>>;
+  setIsAddEventModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const today = new Date();
   const startDate = startOfMonth(currentMonth);
@@ -38,6 +40,7 @@ export default function Month({
     const date = event.currentTarget.parentElement?.getAttribute("data-date");
     if (date) {
       setSelectedDate(date);
+      setIsAddEventModalOpen(true);
     }
   };
 

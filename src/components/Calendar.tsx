@@ -7,6 +7,13 @@ import { AddEventModal } from "./AddEventModal";
 export function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [isAddEventModalOpen, setIsAddEventModalOpen] =
+    useState<boolean>(false);
+
+  function handleCloseAddEventModal() {
+    setSelectedDate(null);
+    setIsAddEventModalOpen(false);
+  }
 
   return (
     <EventProvider>
@@ -15,11 +22,15 @@ export function Calendar() {
           currentMonth={currentMonth}
           setCurrentMonth={setCurrentMonth}
         />
-        <Month currentMonth={currentMonth} setSelectedDate={setSelectedDate} />
-        {selectedDate && (
+        <Month
+          currentMonth={currentMonth}
+          setSelectedDate={setSelectedDate}
+          setIsAddEventModalOpen={setIsAddEventModalOpen}
+        />
+        {isAddEventModalOpen && selectedDate && (
           <AddEventModal
             selectedDate={selectedDate}
-            onClose={() => setSelectedDate(null)}
+            onClose={handleCloseAddEventModal}
           />
         )}
       </div>
