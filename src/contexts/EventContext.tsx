@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 // Event form and state types
 export type EventForm = {
@@ -25,10 +31,21 @@ const EventContext = createContext<
   | undefined
 >(undefined);
 
+const LOCAL_STORAGE_KEY = "calendarEvents";
+
 export const EventProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [events, setEvents] = useState<EventsByDate>({});
+  // Directly initialize state with localStorage data or empty object if nothing found
+  const [events, setEvents] = useState<EventsByDate>(() => {
+    const storedEvents = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return storedEvents ? JSON.parse(storedEvents) : {};
+  });
+
+  // Save events to localStorage whenever the `events` state changes
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(events));
+  }, [events]);
 
   const addEvent = (date: string, eventForm: EventForm) => {
     setEvents((prevEvents) => ({

@@ -58,7 +58,7 @@ export function Calendar() {
 }
 
 // TODO:
-// 1: Delete events
+// *** DONE *** 1: Delete events
 // 2: Store events to local storage
 // 3: Style everything 1:1 to requirements
 // BONUS: Refactor code, check whats missing from course (effects, hooks, etc).
