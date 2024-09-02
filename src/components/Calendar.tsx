@@ -27,7 +27,7 @@ export function Calendar() {
 
   return (
     <EventProvider>
-      <div className="text-default m-auto flex h-screen max-w-[1500px] flex-col rounded-md border border-red-500">
+      <div className="text-default m-auto flex h-screen max-w-[1500px] flex-col">
         <Navigation
           currentMonth={currentMonth}
           setCurrentMonth={setCurrentMonth}

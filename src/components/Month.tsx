@@ -50,7 +50,7 @@ export default function Month({
 
   return (
     <main className="flex flex-1 flex-col p-4">
-      <div className="grid flex-1 grid-cols-7">
+      <div className="grid flex-1 auto-rows-fr grid-cols-7">
         {days.map((day, index) => {
           const isCurrentMonth = isSameMonth(day, currentMonth);
           const isInPast = isBefore(day, today) && !isToday(day);
