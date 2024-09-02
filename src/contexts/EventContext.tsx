@@ -19,6 +19,7 @@ const EventContext = createContext<
   | {
       events: EventsByDate;
       addEvent: (date: string, eventForm: EventForm) => void;
+      editEvent: (date: string, updatedEvent: EventForm) => void;
     }
   | undefined
 >(undefined);
@@ -35,8 +36,19 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
     }));
   };
 
+  const editEvent = (date: string, updatedEvent: EventForm) => {
+    setEvents((prevEvents) => ({
+      ...prevEvents,
+      [date]: prevEvents[date]
+        ? prevEvents[date].map((event) =>
+            event.id === updatedEvent.id ? updatedEvent : event,
+          )
+        : [], // If no events exist for that date, return an empty array
+    }));
+  };
+
   return (
-    <EventContext.Provider value={{ events, addEvent }}>
+    <EventContext.Provider value={{ events, addEvent, editEvent }}>
       {children}
     </EventContext.Provider>
   );

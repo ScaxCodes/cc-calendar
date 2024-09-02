@@ -3,16 +3,26 @@ import { EventProvider } from "../contexts/EventContext";
 import Navigation from "./Navigation";
 import Month from "./Month";
 import { AddEventModal } from "./AddEventModal";
+import { EditEventModal } from "./EditEventModal";
 
 export function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [isAddEventModalOpen, setIsAddEventModalOpen] =
+    useState<boolean>(false);
+  const [isEditEventModalOpen, setIsEditEventModalOpen] =
     useState<boolean>(false);
 
   function handleCloseAddEventModal() {
     setSelectedDate(null);
     setIsAddEventModalOpen(false);
+  }
+
+  function handleCloseEditEventModal() {
+    setSelectedDate(null);
+    setSelectedEventId(null);
+    setIsEditEventModalOpen(false);
   }
 
   return (
@@ -25,12 +35,21 @@ export function Calendar() {
         <Month
           currentMonth={currentMonth}
           setSelectedDate={setSelectedDate}
+          setSelectedEventId={setSelectedEventId}
           setIsAddEventModalOpen={setIsAddEventModalOpen}
+          setIsEditEventModalOpen={setIsEditEventModalOpen}
         />
         {isAddEventModalOpen && selectedDate && (
           <AddEventModal
             selectedDate={selectedDate}
             onClose={handleCloseAddEventModal}
+          />
+        )}
+        {isEditEventModalOpen && selectedDate && selectedEventId && (
+          <EditEventModal
+            selectedDate={selectedDate}
+            selectedEventId={selectedEventId}
+            onClose={handleCloseEditEventModal}
           />
         )}
       </div>

@@ -15,11 +15,15 @@ import { useEvents } from "../contexts/EventContext";
 export default function Month({
   currentMonth,
   setSelectedDate,
+  setSelectedEventId,
   setIsAddEventModalOpen,
+  setIsEditEventModalOpen,
 }: {
   currentMonth: Date;
   setSelectedDate: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedEventId: React.Dispatch<React.SetStateAction<string | null>>;
   setIsAddEventModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsEditEventModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const today = new Date();
   const startDate = startOfMonth(currentMonth);
@@ -71,7 +75,14 @@ export default function Month({
                 +
               </button>
               <div>{format(day, "d")}</div>
-              {eventsForDay && <Events eventsForDay={eventsForDay} />}
+              {eventsForDay && (
+                <Events
+                  eventsForDay={eventsForDay}
+                  setSelectedDate={setSelectedDate}
+                  setSelectedEventId={setSelectedEventId}
+                  setIsEditEventModalOpen={setIsEditEventModalOpen}
+                />
+              )}
             </div>
           );
         })}
