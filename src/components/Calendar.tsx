@@ -60,7 +60,7 @@ export function Calendar() {
 // TODO:
 // *** DONE *** 1: Delete events
 // *** DONE *** 2: Store events to local storage
-// 3: Style everything 1:1 to requirements
+// *** DONE *** 3: Style everything 1:1 to requirements
 // BONUS: Refactor code, check whats missing from course (effects, hooks, etc).
 // 4: Overflow modal
 // 5: Open/Closing animation for modal

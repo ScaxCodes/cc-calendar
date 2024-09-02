@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useEvents, EventForm } from "../contexts/EventContext";
+import { convertDateForModal } from "../utils/convertDateForModal";
 
 export function AddEventModal({
   selectedDate,
@@ -41,9 +42,13 @@ export function AddEventModal({
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-96 rounded bg-white p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Add Event</h2>
-          <span className="text-modal-date-header">{selectedDate}</span>
-          <button onClick={onClose}>X</button>
+          <h2 className="text-3xl">Add Event</h2>
+          <span className="text-modal-date-header text-2xl">
+            {convertDateForModal(selectedDate)}
+          </span>
+          <button onClick={onClose} className="text-3xl">
+            &#215;
+          </button>
         </div>
         <form onSubmit={handleSubmit}>
           {/* Event Name */}
@@ -54,13 +59,13 @@ export function AddEventModal({
             <input
               type="text"
               ref={nameRef} // Using ref instead of state
-              className="mt-1 w-full rounded border p-2"
+              className="w-full rounded border p-2"
               required
             />
           </div>
 
           {/* All Day Checkbox */}
-          <div className="mb-4">
+          <div className="mb-4 flex">
             <input
               type="checkbox"
               checked={allDay}
@@ -80,7 +85,7 @@ export function AddEventModal({
               <input
                 type="time"
                 ref={startTimeRef} // Using ref instead of state
-                className="mt-1 w-full rounded border p-2"
+                className="w-full rounded border p-2"
                 disabled={allDay} // Disable if allDay is true
                 required={!allDay}
               />
@@ -92,7 +97,7 @@ export function AddEventModal({
               <input
                 type="time"
                 ref={endTimeRef} // Using ref instead of state
-                className="mt-1 w-full rounded border p-2"
+                className="w-full rounded border p-2"
                 disabled={allDay} // Disable if allDay is true
                 required={!allDay}
               />
@@ -104,7 +109,7 @@ export function AddEventModal({
             <label className="text-modal-form-label text-sm font-medium">
               Color
             </label>
-            <div className="mt-2 flex items-center gap-4">
+            <div className="flex items-center gap-4">
               {["red", "green", "blue"].map((color) => (
                 <label className="cursor-pointer" key={color}>
                   <input

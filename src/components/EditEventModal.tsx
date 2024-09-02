@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useEvents, EventForm } from "../contexts/EventContext";
+import { convertDateForModal } from "../utils/convertDateForModal";
 
 export function EditEventModal({
   selectedDate,
@@ -63,7 +64,9 @@ export function EditEventModal({
       <div className="w-96 rounded bg-white p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold">Edit Event</h2>
-          <span className="text-modal-date-header">{selectedDate}</span>
+          <span className="text-modal-date-header">
+            {convertDateForModal(selectedDate)}
+          </span>
           <button onClick={onClose}>X</button>
         </div>
         <form onSubmit={handleSubmit}>
@@ -75,13 +78,13 @@ export function EditEventModal({
             <input
               type="text"
               ref={nameRef} // Using ref instead of state
-              className="mt-1 w-full rounded border p-2"
+              className="w-full rounded border p-2"
               required
             />
           </div>
 
           {/* All Day? */}
-          <div className="mb-4">
+          <div className="mb-4 flex">
             <input
               type="checkbox"
               checked={allDay}
@@ -101,7 +104,7 @@ export function EditEventModal({
               <input
                 type="time"
                 ref={startTimeRef} // Using ref instead of state
-                className="mt-1 w-full rounded border p-2"
+                className="w-full rounded border p-2"
                 disabled={allDay}
                 required={!allDay}
               />
@@ -114,7 +117,7 @@ export function EditEventModal({
               <input
                 type="time"
                 ref={endTimeRef} // Using ref instead of state
-                className="mt-1 w-full rounded border p-2"
+                className="w-full rounded border p-2"
                 disabled={allDay}
                 required={!allDay}
               />
@@ -126,7 +129,7 @@ export function EditEventModal({
             <label className="text-modal-form-label text-sm font-medium">
               Color
             </label>
-            <div className="mt-2 flex items-center gap-4">
+            <div className="flex items-center gap-4">
               {/* Red Square */}
               <label className="cursor-pointer">
                 <input

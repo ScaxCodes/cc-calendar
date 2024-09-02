@@ -47,7 +47,7 @@ export default function Events({
             ) : (
               <>
                 <div
-                  className={`bg-custom-${singleEvent.color} mr-2 h-3 w-3 shrink-0 rounded-full`}
+                  className={`bg-custom-${singleEvent.color} mr-2 h-2 w-2 shrink-0 rounded-full`}
                 />
                 <div className="text-timed-event mr-2">
                   {singleEvent.startTime}
