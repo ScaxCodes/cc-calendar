@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useEvents, EventForm } from "../contexts/EventContext";
 
 export function AddEventModal({

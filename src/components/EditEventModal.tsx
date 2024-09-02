@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useEvents, EventForm } from "../contexts/EventContext";
 
 export function EditEventModal({
@@ -10,7 +10,7 @@ export function EditEventModal({
   selectedEventId: string;
   onClose: () => void;
 }) {
-  const { events, editEvent } = useEvents();
+  const { events, editEvent, deleteEvent } = useEvents();
   const [selectedEvent] = events[selectedDate].filter(
     (event) => event.id === selectedEventId,
   );
@@ -54,6 +54,7 @@ export function EditEventModal({
 
   function handleDelete() {
     // TODO: Delete Event
+    deleteEvent(selectedDate, selectedEventId);
     onClose();
   }
 
