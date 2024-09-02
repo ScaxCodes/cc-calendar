@@ -35,11 +35,11 @@ export default function Events({
         <button
           key={singleEvent.id}
           onClick={(event) => handleEditEvent(event, singleEvent.id)}
-          className="block"
+          className="w-full"
         >
           <div className="flex items-center">
             {singleEvent.allDay ? (
-              <div className={`bg-custom-${singleEvent.color}`}>
+              <div className={`w-full bg-custom-${singleEvent.color}`}>
                 {singleEvent.name}
               </div>
             ) : (
