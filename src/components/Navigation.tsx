@@ -14,7 +14,7 @@ export default function Navigation({
     <nav className="my-4 ml-4 flex items-center gap-4">
       <button
         onClick={() => setCurrentMonth(new Date())}
-        className="border-custom-grey hover:bg-today-button-bg-hover rounded-md border px-4 py-1"
+        className="border-custom-grey hover:bg-today-button-bg-hover ml-4 rounded-md border px-4 py-1"
       >
         Today
       </button>

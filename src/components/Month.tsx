@@ -49,7 +49,7 @@ export default function Month({
   };
 
   return (
-    <main className="flex flex-1 flex-col p-4">
+    <main className="flex flex-1 flex-col px-4">
       <div className="grid flex-1 auto-rows-fr grid-cols-7">
         {days.map((day, index) => {
           const isCurrentMonth = isSameMonth(day, currentMonth);
@@ -60,7 +60,7 @@ export default function Month({
             : "bg-custom-grey";
           const opacityClass = isInPast ? "opacity-50" : "opacity-100";
           const todayHighlightClass = isToday(day)
-            ? "bg-todays-day m-auto h-6 w-6 rounded-full text-white"
+            ? "bg-todays-day m-auto h-5 w-5 rounded-full text-white"
             : "";
 
           const dayISO = format(day, "yyyy-MM-dd");
@@ -69,10 +69,10 @@ export default function Month({
           return (
             <div
               key={index}
-              className={`group relative border p-1 text-center ${backgroundClass} ${opacityClass}`}
+              className={`group relative border border-[#CCC] p-1 text-center ${backgroundClass} ${opacityClass}`}
               data-date={dayISO}
             >
-              <div className="text-week-name">
+              <div className="text-week-name text-sm">
                 {index <= 6 && format(day, "EEE").toUpperCase()}
               </div>
               <button
@@ -81,7 +81,7 @@ export default function Month({
               >
                 +
               </button>
-              <div className={`mb-1 ${todayHighlightClass}`}>
+              <div className={`mb-1 ${todayHighlightClass} text-sm`}>
                 {format(day, "d")}
               </div>
               {eventsForDay && (
