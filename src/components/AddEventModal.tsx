@@ -43,13 +43,7 @@ export function AddEventModal({
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold">Add Event</h2>
           <span>{selectedDate}</span>
-          <button onClick={onClose}>
-            <img
-              src="https://www.svgrepo.com/show/513658/cross.svg"
-              className="w-4"
-              alt="Close"
-            />
-          </button>
+          <button onClick={onClose}>X</button>
         </div>
         <form onSubmit={handleSubmit}>
           {/* Event Name */}
