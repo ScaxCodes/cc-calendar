@@ -42,13 +42,15 @@ export function AddEventModal({
       <div className="w-96 rounded bg-white p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold">Add Event</h2>
-          <span>{selectedDate}</span>
+          <span className="text-modal-date-header">{selectedDate}</span>
           <button onClick={onClose}>X</button>
         </div>
         <form onSubmit={handleSubmit}>
           {/* Event Name */}
           <div className="mb-4">
-            <label className="text-sm font-medium">Name</label>
+            <label className="text-modal-form-label text-sm font-medium">
+              Name
+            </label>
             <input
               type="text"
               ref={nameRef} // Using ref instead of state
@@ -64,13 +66,17 @@ export function AddEventModal({
               checked={allDay}
               onChange={() => setAllDay((prev) => !prev)} // Still using state for allDay
             />
-            <label className="ml-2 text-sm font-medium">All Day?</label>
+            <label className="text-modal-form-label ml-2 text-sm font-medium">
+              All Day?
+            </label>
           </div>
 
           {/* Start Time and End Time */}
           <div className="mb-4 flex justify-between gap-2">
             <div className="w-full">
-              <label className="block text-sm font-medium">Start Time</label>
+              <label className="text-modal-form-label block text-sm font-medium">
+                Start Time
+              </label>
               <input
                 type="time"
                 ref={startTimeRef} // Using ref instead of state
@@ -80,7 +86,9 @@ export function AddEventModal({
               />
             </div>
             <div className="w-full">
-              <label className="block text-sm font-medium">End Time</label>
+              <label className="text-modal-form-label block text-sm font-medium">
+                End Time
+              </label>
               <input
                 type="time"
                 ref={endTimeRef} // Using ref instead of state
@@ -93,7 +101,9 @@ export function AddEventModal({
 
           {/* Color Selection */}
           <div className="mb-4">
-            <label className="text-sm font-medium">Color</label>
+            <label className="text-modal-form-label text-sm font-medium">
+              Color
+            </label>
             <div className="mt-2 flex items-center gap-4">
               {["red", "green", "blue"].map((color) => (
                 <label className="cursor-pointer" key={color}>

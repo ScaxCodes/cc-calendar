@@ -27,7 +27,7 @@ export function Calendar() {
 
   return (
     <EventProvider>
-      <div className="m-auto flex h-screen max-w-[1500px] flex-col rounded-md border border-red-500">
+      <div className="text-default m-auto flex h-screen max-w-[1500px] flex-col rounded-md border border-red-500">
         <Navigation
           currentMonth={currentMonth}
           setCurrentMonth={setCurrentMonth}
@@ -59,7 +59,7 @@ export function Calendar() {
 
 // TODO:
 // *** DONE *** 1: Delete events
-// 2: Store events to local storage
+// *** DONE *** 2: Store events to local storage
 // 3: Style everything 1:1 to requirements
 // BONUS: Refactor code, check whats missing from course (effects, hooks, etc).
 // 4: Overflow modal

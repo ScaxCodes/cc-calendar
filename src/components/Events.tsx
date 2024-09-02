@@ -35,11 +35,13 @@ export default function Events({
         <button
           key={singleEvent.id}
           onClick={(event) => handleEditEvent(event, singleEvent.id)}
-          className="w-full"
+          className="mb-2 w-full text-left"
         >
           <div className="flex items-center">
             {singleEvent.allDay ? (
-              <div className={`w-full bg-custom-${singleEvent.color}`}>
+              <div
+                className={`w-full rounded px-1 text-white bg-custom-${singleEvent.color}`}
+              >
                 {singleEvent.name}
               </div>
             ) : (
@@ -47,7 +49,9 @@ export default function Events({
                 <div
                   className={`bg-custom-${singleEvent.color} mr-3 h-3 w-3 rounded-full`}
                 />
-                <div className="mr-1">{singleEvent.startTime}</div>
+                <div className="text-timed-event mr-1">
+                  {singleEvent.startTime}
+                </div>
                 <div>{singleEvent.name}</div>
               </>
             )}
