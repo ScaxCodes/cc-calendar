@@ -37,7 +37,7 @@ export default function Events({
           onClick={(event) => handleEditEvent(event, singleEvent.id)}
           className="mb-2 w-full text-left"
         >
-          <div className="flex items-center">
+          <div className="flex items-center overflow-hidden whitespace-nowrap">
             {singleEvent.allDay ? (
               <div
                 className={`w-full rounded px-1 text-white bg-custom-${singleEvent.color}`}
@@ -47,7 +47,7 @@ export default function Events({
             ) : (
               <>
                 <div
-                  className={`bg-custom-${singleEvent.color} mr-3 h-3 w-3 rounded-full`}
+                  className={`bg-custom-${singleEvent.color} mr-3 h-3 w-3 shrink-0 rounded-full`}
                 />
                 <div className="text-timed-event mr-1">
                   {singleEvent.startTime}
