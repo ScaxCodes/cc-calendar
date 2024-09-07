@@ -4,15 +4,21 @@ import Navigation from "./Navigation";
 import Month from "./Month";
 import { AddEventModal } from "./AddEventModal";
 import { EditEventModal } from "./EditEventModal";
+import { useUI } from "../contexts/UIContext";
 
 export function Calendar() {
+  const {
+    selectedDate,
+    setSelectedDate,
+    selectedEventId,
+    setSelectedEventId,
+    isAddEventModalOpen,
+    setIsAddEventModalOpen,
+    isEditEventModalOpen,
+    setIsEditEventModalOpen,
+  } = useUI(); // Get these from context
+
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-  const [isAddEventModalOpen, setIsAddEventModalOpen] =
-    useState<boolean>(false);
-  const [isEditEventModalOpen, setIsEditEventModalOpen] =
-    useState<boolean>(false);
 
   function handleCloseAddEventModal() {
     setSelectedDate(null);
@@ -32,25 +38,12 @@ export function Calendar() {
           currentMonth={currentMonth}
           setCurrentMonth={setCurrentMonth}
         />
-        <Month
-          currentMonth={currentMonth}
-          setSelectedDate={setSelectedDate}
-          setSelectedEventId={setSelectedEventId}
-          setIsAddEventModalOpen={setIsAddEventModalOpen}
-          setIsEditEventModalOpen={setIsEditEventModalOpen}
-        />
+        <Month currentMonth={currentMonth} />
         {isAddEventModalOpen && selectedDate && (
-          <AddEventModal
-            selectedDate={selectedDate}
-            onClose={handleCloseAddEventModal}
-          />
+          <AddEventModal onClose={handleCloseAddEventModal} />
         )}
         {isEditEventModalOpen && selectedDate && selectedEventId && (
-          <EditEventModal
-            selectedDate={selectedDate}
-            selectedEventId={selectedEventId}
-            onClose={handleCloseEditEventModal}
-          />
+          <EditEventModal onClose={handleCloseEditEventModal} />
         )}
       </div>
     </EventProvider>

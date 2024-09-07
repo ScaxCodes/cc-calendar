@@ -1,17 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useEvents, EventForm } from "../contexts/EventContext";
+import { useUI } from "../contexts/UIContext";
 import { convertDateForModal } from "../utils/convertDateForModal";
 
-export function EditEventModal({
-  selectedDate,
-  selectedEventId,
-  onClose,
-}: {
-  selectedDate: string;
-  selectedEventId: string;
-  onClose: () => void;
-}) {
+export function EditEventModal({ onClose }: { onClose: () => void }) {
   const { events, editEvent, deleteEvent } = useEvents();
+  const { selectedDate, selectedEventId } = useUI();
+  if (selectedDate === null)
+    throw new Error("No valid date string available for modal functionality!");
+
   const [selectedEvent] = events[selectedDate].filter(
     (event) => event.id === selectedEventId,
   );
@@ -54,7 +51,6 @@ export function EditEventModal({
   };
 
   function handleDelete() {
-    // TODO: Delete Event
     deleteEvent(selectedDate, selectedEventId);
     onClose();
   }

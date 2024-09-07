@@ -1,16 +1,14 @@
 import { EventForm } from "../contexts/EventContext";
+import { useUI } from "../contexts/UIContext"; // Import the context
 
 export default function Events({
   eventsForDay,
-  setSelectedDate,
-  setSelectedEventId,
-  setIsEditEventModalOpen,
 }: {
   eventsForDay: EventForm[];
-  setSelectedDate: React.Dispatch<React.SetStateAction<string | null>>;
-  setSelectedEventId: React.Dispatch<React.SetStateAction<string | null>>;
-  setIsEditEventModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const { setSelectedDate, setSelectedEventId, setIsEditEventModalOpen } =
+    useUI(); // Get the necessary functions from context
+
   const eventsForDaySorted = eventsForDay.sort((a, b) => {
     if (a.allDay && !b.allDay) return -1;
     if (!a.allDay && b.allDay) return 1;
@@ -23,9 +21,9 @@ export default function Events({
   ) => {
     const date = event.currentTarget.parentElement?.getAttribute("data-date");
     if (date) {
-      setSelectedDate(date);
-      setSelectedEventId(id);
-      setIsEditEventModalOpen(true);
+      setSelectedDate(date); // Use context to set selected date
+      setSelectedEventId(id); // Use context to set selected event ID
+      setIsEditEventModalOpen(true); // Use context to open edit modal
     }
   };
 
@@ -35,21 +33,21 @@ export default function Events({
         <button
           key={singleEvent.id}
           onClick={(event) => handleEditEvent(event, singleEvent.id)}
-          className="mb-2 w-full overflow-hidden whitespace-nowrap text-left"
+          className="mb-2 w-full text-left"
         >
           <div className="flex items-center">
             {singleEvent.allDay ? (
               <div
                 className={`w-full rounded px-1 text-white bg-custom-${singleEvent.color}`}
               >
-                <div className="overflow-hidden">{singleEvent.name}</div>
+                {singleEvent.name}
               </div>
             ) : (
               <>
                 <div
-                  className={`bg-custom-${singleEvent.color} mr-2 h-2 w-2 shrink-0 rounded-full`}
+                  className={`bg-custom-${singleEvent.color} mr-3 h-3 w-3 shrink-0 rounded-full`}
                 />
-                <div className="text-timed-event mr-2">
+                <div className="text-timed-event mr-1">
                   {singleEvent.startTime}
                 </div>
                 <div>{singleEvent.name}</div>

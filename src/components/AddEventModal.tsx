@@ -1,15 +1,11 @@
 import { useRef, useState } from "react";
 import { useEvents, EventForm } from "../contexts/EventContext";
 import { convertDateForModal } from "../utils/convertDateForModal";
+import { useUI } from "../contexts/UIContext";
 
-export function AddEventModal({
-  selectedDate,
-  onClose,
-}: {
-  selectedDate: string;
-  onClose: () => void;
-}) {
+export function AddEventModal({ onClose }: { onClose: () => void }) {
   const { addEvent } = useEvents();
+  const { selectedDate } = useUI();
 
   // Using useRef for fields that don't need to trigger re-renders
   const nameRef = useRef<HTMLInputElement>(null);

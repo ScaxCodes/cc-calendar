@@ -24,9 +24,9 @@ type EventsByDate = {
 const EventContext = createContext<
   | {
       events: EventsByDate;
-      addEvent: (date: string, eventForm: EventForm) => void;
-      editEvent: (date: string, updatedEvent: EventForm) => void;
-      deleteEvent: (date: string, eventId: string) => void;
+      addEvent: (date: string | null, eventForm: EventForm) => void;
+      editEvent: (date: string | null, updatedEvent: EventForm) => void;
+      deleteEvent: (date: string | null, eventId: string | null) => void;
     }
   | undefined
 >(undefined);
@@ -47,14 +47,20 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(events));
   }, [events]);
 
-  const addEvent = (date: string, eventForm: EventForm) => {
+  const addEvent = (date: string | null, eventForm: EventForm) => {
+    if (date === null)
+      throw new Error("No valid date string available for adding new event!");
+
     setEvents((prevEvents) => ({
       ...prevEvents,
       [date]: prevEvents[date] ? [...prevEvents[date], eventForm] : [eventForm],
     }));
   };
 
-  const editEvent = (date: string, updatedEvent: EventForm) => {
+  const editEvent = (date: string | null, updatedEvent: EventForm) => {
+    if (date === null)
+      throw new Error("No valid date string available for editing event!");
+
     setEvents((prevEvents) => ({
       ...prevEvents,
       [date]: prevEvents[date]
@@ -65,7 +71,12 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
     }));
   };
 
-  const deleteEvent = (date: string, eventId: string) => {
+  const deleteEvent = (date: string | null, eventId: string | null) => {
+    if (date === null)
+      throw new Error("No valid date string available for deleting event!");
+    if (eventId === null)
+      throw new Error("No valid event id available for deleting event!");
+
     setEvents((prevEvents) => {
       const filteredEvents = prevEvents[date].filter(
         (event) => event.id !== eventId,

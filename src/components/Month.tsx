@@ -11,26 +11,16 @@ import {
 } from "date-fns";
 import Events from "./Events";
 import { useEvents } from "../contexts/EventContext";
+import { useUI } from "../contexts/UIContext";
 
-export default function Month({
-  currentMonth,
-  setSelectedDate,
-  setSelectedEventId,
-  setIsAddEventModalOpen,
-  setIsEditEventModalOpen,
-}: {
-  currentMonth: Date;
-  setSelectedDate: React.Dispatch<React.SetStateAction<string | null>>;
-  setSelectedEventId: React.Dispatch<React.SetStateAction<string | null>>;
-  setIsAddEventModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsEditEventModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export default function Month({ currentMonth }: { currentMonth: Date }) {
   const today = new Date();
   const startDate = startOfMonth(currentMonth);
   const endDate = endOfMonth(currentMonth);
   const startGrid = startOfWeek(startDate);
   const endGrid = endOfWeek(endDate);
 
+  const { setSelectedDate, setIsAddEventModalOpen } = useUI(); // Get these from context
   const { events } = useEvents();
 
   const days = [];
@@ -43,14 +33,14 @@ export default function Month({
   const handleAddEvent = (event: React.MouseEvent<HTMLButtonElement>) => {
     const date = event.currentTarget.parentElement?.getAttribute("data-date");
     if (date) {
-      setSelectedDate(date);
-      setIsAddEventModalOpen(true);
+      setSelectedDate(date); // Use context instead of props
+      setIsAddEventModalOpen(true); // Use context instead of props
     }
   };
 
   return (
-    <main className="flex flex-1 flex-col px-4">
-      <div className="grid flex-1 auto-rows-fr grid-cols-7">
+    <main className="flex flex-1 flex-col p-4">
+      <div className="grid flex-1 grid-cols-7">
         {days.map((day, index) => {
           const isCurrentMonth = isSameMonth(day, currentMonth);
           const isInPast = isBefore(day, today) && !isToday(day);
@@ -60,7 +50,7 @@ export default function Month({
             : "bg-custom-grey";
           const opacityClass = isInPast ? "opacity-50" : "opacity-100";
           const todayHighlightClass = isToday(day)
-            ? "bg-todays-day m-auto h-5 w-5 rounded-full text-white"
+            ? "bg-todays-day m-auto h-6 w-6 rounded-full text-white"
             : "";
 
           const dayISO = format(day, "yyyy-MM-dd");
@@ -69,10 +59,10 @@ export default function Month({
           return (
             <div
               key={index}
-              className={`group relative border border-[#CCC] p-1 text-center ${backgroundClass} ${opacityClass}`}
+              className={`group relative border p-1 text-center ${backgroundClass} ${opacityClass}`}
               data-date={dayISO}
             >
-              <div className="text-week-name text-sm">
+              <div className="text-week-name">
                 {index <= 6 && format(day, "EEE").toUpperCase()}
               </div>
               <button
@@ -81,17 +71,10 @@ export default function Month({
               >
                 +
               </button>
-              <div className={`mb-1 ${todayHighlightClass} text-sm`}>
+              <div className={`mb-1 ${todayHighlightClass}`}>
                 {format(day, "d")}
               </div>
-              {eventsForDay && (
-                <Events
-                  eventsForDay={eventsForDay}
-                  setSelectedDate={setSelectedDate}
-                  setSelectedEventId={setSelectedEventId}
-                  setIsEditEventModalOpen={setIsEditEventModalOpen}
-                />
-              )}
+              {eventsForDay && <Events eventsForDay={eventsForDay} />}
             </div>
           );
         })}
