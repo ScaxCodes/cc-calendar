@@ -62,23 +62,52 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
               className={`group relative border p-1 text-center ${backgroundClass} ${opacityClass}`}
               data-date={dayISO}
             >
-              <div className="text-week-name">
-                {index <= 6 && format(day, "EEE").toUpperCase()}
-              </div>
-              <button
-                onClick={handleAddEvent}
-                className="absolute right-0 top-0 m-1 hidden h-6 w-6 rounded-full bg-blue-500 text-white hover:bg-blue-600 group-hover:block"
-              >
-                +
-              </button>
-              <div className={`mb-1 ${todayHighlightClass}`}>
-                {format(day, "d")}
-              </div>
+              <DayName index={index} day={day} />
+              <AddEventButton handleAddEvent={handleAddEvent} />
+              <DayNumber todayHighlightClass={todayHighlightClass} day={day} />
+
               {eventsForDay && <Events eventsForDay={eventsForDay} />}
             </div>
           );
         })}
       </div>
     </main>
+  );
+}
+
+function DayName({ index, day }: { index: number; day: Date }) {
+  return (
+    <div className="text-week-name">
+      {index <= 6 && format(day, "EEE").toUpperCase()}
+    </div>
+  );
+}
+
+function DayNumber({
+  todayHighlightClass,
+  day,
+}: {
+  todayHighlightClass:
+    | "bg-todays-day m-auto h-6 w-6 rounded-full text-white"
+    | "";
+  day: Date;
+}) {
+  return (
+    <div className={`mb-1 ${todayHighlightClass}`}>{format(day, "d")}</div>
+  );
+}
+
+function AddEventButton({
+  handleAddEvent,
+}: {
+  handleAddEvent: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}) {
+  return (
+    <button
+      onClick={handleAddEvent}
+      className="absolute right-0 top-0 m-1 hidden h-6 w-6 rounded-full bg-blue-500 text-white hover:bg-blue-600 group-hover:block"
+    >
+      +
+    </button>
   );
 }
