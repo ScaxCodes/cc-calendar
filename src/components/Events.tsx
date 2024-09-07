@@ -33,7 +33,7 @@ export default function Events({
         <button
           key={singleEvent.id}
           onClick={(event) => handleEditEvent(event, singleEvent.id)}
-          className="mb-2 w-full text-left"
+          className="mb-2 w-full overflow-hidden whitespace-nowrap text-left"
         >
           <div className="flex items-center">
             {singleEvent.allDay ? (
