@@ -15,6 +15,8 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
   // State for fields that require reactivity
   const [allDay, setAllDay] = useState(false);
   const [selectedColor, setSelectedColor] = useState("red");
+  // Additional state to track start time for form validation
+  const [startTime, setStartTime] = useState<string | null>(null);
 
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
@@ -32,6 +34,10 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
     // Add event via context method
     addEvent(selectedDate, newEvent);
     onClose(); // Close modal after adding the event
+  };
+
+  const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStartTime(e.target.value);
   };
 
   return (
@@ -84,6 +90,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
                 className="w-full rounded border p-2"
                 disabled={allDay} // Disable if allDay is true
                 required={!allDay}
+                onChange={handleStartTimeChange} // For form validation only
               />
             </div>
             <div className="w-full">
@@ -96,6 +103,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
                 className="w-full rounded border p-2"
                 disabled={allDay} // Disable if allDay is true
                 required={!allDay}
+                min={startTime || ""}
               />
             </div>
           </div>

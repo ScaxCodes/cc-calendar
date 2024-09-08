@@ -18,8 +18,11 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
   const startTimeRef = useRef<HTMLInputElement>(null);
   const endTimeRef = useRef<HTMLInputElement>(null);
 
+  // State for fields that require reactivity
   const [allDay, setAllDay] = useState(selectedEvent.allDay);
   const [selectedColor, setSelectedColor] = useState(selectedEvent.color);
+  // Additional state to track start time for form validation
+  const [startTime, setStartTime] = useState(selectedEvent.startTime);
 
   useEffect(() => {
     if (nameRef.current) {
@@ -48,6 +51,10 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
     // Edit event via context method
     editEvent(selectedDate, editedEvent);
     onClose(); // Close modal after submission
+  };
+
+  const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStartTime(e.target.value);
   };
 
   function handleDelete() {
@@ -103,6 +110,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
                 className="w-full rounded border p-2"
                 disabled={allDay}
                 required={!allDay}
+                onChange={handleStartTimeChange} // For form validation only
               />
             </div>
             {/* End Time */}
@@ -116,6 +124,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
                 className="w-full rounded border p-2"
                 disabled={allDay}
                 required={!allDay}
+                min={startTime || ""}
               />
             </div>
           </div>

@@ -54,6 +54,11 @@ export function Calendar() {
 // *** DONE *** 1: Delete events
 // *** DONE *** 2: Store events to local storage
 // *** DONE *** 3: Style everything 1:1 to requirements
-// BONUS: Refactor code, check whats missing from course (effects, hooks, etc).
+// *** DONE *** BONUS: Refactor code, check whats missing from course (effects, hooks, etc).
+// LOGIC: The startTime must be before the endTime and is required if allDay is not checked.
 // 4: Overflow modal
 // 5: Open/Closing animation for modal
+// BONUS: Duplication and DRY Principle: Check if there's any duplicated logic that can be abstracted into reusable hooks or utility functions.
+// Like ADD/EDIT Modal
+// BONUS: Code Consistency: Maintain consistency in coding styles (e.g., naming conventions, file structure) across the entire project. Check if it's aligned with your team's style guide.
+// Declaring functions with function syntax, not const
