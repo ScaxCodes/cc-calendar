@@ -8,20 +8,19 @@ import {
   isSameMonth,
   isBefore,
   isToday,
+  differenceInDays,
 } from "date-fns";
 import Events from "./Events";
 import { useEvents } from "../contexts/EventContext";
 import { useUI } from "../contexts/UIContext";
 
 export default function Month({ currentMonth }: { currentMonth: Date }) {
+  // Get days of the month
   const today = new Date();
   const startDate = startOfMonth(currentMonth);
   const endDate = endOfMonth(currentMonth);
   const startGrid = startOfWeek(startDate);
   const endGrid = endOfWeek(endDate);
-
-  const { setSelectedDate, setIsAddEventModalOpen } = useUI(); // Get these from context
-  const { events } = useEvents();
 
   const days = [];
   let day = startGrid;
@@ -29,6 +28,15 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
     days.push(day);
     day = addDays(day, 1);
   }
+
+  // Calculate number of weeks to display
+  const start = startOfWeek(startOfMonth(currentMonth));
+  const end = endOfWeek(endOfMonth(currentMonth));
+  const totalDays = differenceInDays(end, start);
+  const weeks = Math.ceil(totalDays / 7);
+
+  const { setSelectedDate, setIsAddEventModalOpen } = useUI(); // Get these from context
+  const { events } = useEvents();
 
   const handleAddEvent = (event: React.MouseEvent<HTMLButtonElement>) => {
     const date = event.currentTarget.parentElement?.getAttribute("data-date");
@@ -59,7 +67,8 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
           return (
             <div
               key={index}
-              className={`group relative border p-1 text-center ${backgroundClass} ${opacityClass}`}
+              className={`group relative border p-1 text-center ${backgroundClass} ${opacityClass} overflow-hidden`}
+              style={{ height: `calc((100vh - 98px) / ${weeks})` }}
               data-date={dayISO}
             >
               <DayName index={index} day={day} />
