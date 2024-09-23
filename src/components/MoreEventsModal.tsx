@@ -1,8 +1,28 @@
+import { useEvents } from "../contexts/EventContext";
 import { useUI } from "../contexts/UIContext";
 import { convertDateForModal } from "../utils/convertDateForModal";
+import { sortEvents } from "../utils/sortEvents";
 
 export function MoreEventsModal({ onClose }: { onClose: () => void }) {
-  const { selectedDate } = useUI();
+  const {
+    selectedDate,
+    setSelectedEventId,
+    setIsEditEventModalOpen,
+    setIsMoreEventsModalOpen,
+  } = useUI();
+  const { events } = useEvents();
+
+  if (selectedDate === null) {
+    throw new Error("Could not get a valid date for selecting events");
+  }
+  const eventsForDay = events[selectedDate];
+  const eventsForDaySorted = sortEvents(eventsForDay);
+
+  const handleEditEvent = (id: string) => {
+    setSelectedEventId(id); // Use context to set selected event ID
+    setIsEditEventModalOpen(true); // Use context to open edit modal
+    setIsMoreEventsModalOpen(false);
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -14,6 +34,37 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
           <button onClick={onClose} className="text-3xl">
             &#215;
           </button>
+        </div>
+        <div>
+          {eventsForDaySorted.map((singleEvent) => {
+            return (
+              <button
+                key={singleEvent.id}
+                onClick={() => handleEditEvent(singleEvent.id)}
+                className="mb-2 w-full overflow-hidden whitespace-nowrap text-left"
+              >
+                <div className="flex items-center">
+                  {singleEvent.allDay ? (
+                    <div
+                      className={`w-full rounded px-1 text-white bg-custom-${singleEvent.color}`}
+                    >
+                      {singleEvent.name}
+                    </div>
+                  ) : (
+                    <>
+                      <div
+                        className={`bg-custom-${singleEvent.color} mr-3 h-3 w-3 shrink-0 rounded-full`}
+                      />
+                      <div className="text-timed-event mr-1">
+                        {singleEvent.startTime}
+                      </div>
+                      <div>{singleEvent.name}</div>
+                    </>
+                  )}
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

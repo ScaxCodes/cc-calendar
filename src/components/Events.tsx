@@ -1,5 +1,6 @@
 import { EventForm } from "../contexts/EventContext";
 import { useUI } from "../contexts/UIContext"; // Import the context
+import { sortEvents } from "../utils/sortEvents";
 
 export default function Events({
   eventsForDay,
@@ -19,11 +20,7 @@ export default function Events({
   const { setSelectedDate, setSelectedEventId, setIsEditEventModalOpen } =
     useUI(); // Get the necessary functions from context
 
-  const eventsForDaySorted = eventsForDay.sort((a, b) => {
-    if (a.allDay && !b.allDay) return -1;
-    if (!a.allDay && b.allDay) return 1;
-    return !a.allDay && !b.allDay ? a.startTime.localeCompare(b.startTime) : 0;
-  });
+  const eventsForDaySorted = sortEvents(eventsForDay);
 
   const handleEditEvent = (
     event: React.MouseEvent<HTMLButtonElement>,

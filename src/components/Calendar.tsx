@@ -74,3 +74,4 @@ export function Calendar() {
 // BONUS: Code Consistency: Maintain consistency in coding styles (e.g., naming conventions, file structure) across the entire project. Check if it's aligned with your team's style guide.
 // Declaring functions with function syntax, not const
 // BONUS: Add Tailwind classes for same styling of events in daycell and in viewmore-modal
+// BONUS: Why are events already sorted in context/localstorage?
