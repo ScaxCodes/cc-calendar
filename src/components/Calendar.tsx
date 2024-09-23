@@ -68,7 +68,7 @@ export function Calendar() {
 // *** DONE *** BONUS: Refactor code, check whats missing from course (effects, hooks, etc).
 // *** DONE *** LOGIC: The startTime must be before the endTime and is required if allDay is not checked.
 // *** DONE *** 4: Overflow modal
-// 5: Open/Closing animation for modal
+// *** DONE *** 5: Open/Closing animation for modal
 // 6: Style hover add event button
 // BONUS: Duplication and DRY Principle: Check if there's any duplicated logic that can be abstracted into reusable hooks or utility functions.
 // Like ADD/EDIT Modal

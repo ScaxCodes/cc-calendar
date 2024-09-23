@@ -112,7 +112,7 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
           const opacityClass = isInPast ? "opacity-50" : "opacity-100";
           const todayHighlightClass = isToday(day)
             ? "bg-todays-day m-auto h-6 w-6 rounded-full text-white flex justify-center items-center"
-            : "";
+            : "m-auto h-6 w-6 flex justify-center items-center";
 
           const dayISO = format(day, "yyyy-MM-dd");
           const eventsForDay = events[dayISO];
@@ -181,7 +181,7 @@ function DayNumber({
 }: {
   todayHighlightClass:
     | "bg-todays-day m-auto h-6 w-6 rounded-full text-white flex justify-center items-center"
-    | "";
+    | "m-auto h-6 w-6 flex justify-center items-center";
   day: Date;
 }) {
   return (
