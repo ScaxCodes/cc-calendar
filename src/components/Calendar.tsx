@@ -69,11 +69,11 @@ export function Calendar() {
 // *** DONE *** LOGIC: The startTime must be before the endTime and is required if allDay is not checked.
 // *** DONE *** 4: Overflow modal
 // *** DONE *** 5: Open/Closing animation for modal
-// 6: Style hover add event button
+// *** DONE *** 6: Style hover add event button
 // BONUS: Duplication and DRY Principle: Check if there's any duplicated logic that can be abstracted into reusable hooks or utility functions.
 // Like ADD/EDIT Modal
 // BONUS: Code Consistency: Maintain consistency in coding styles (e.g., naming conventions, file structure) across the entire project. Check if it's aligned with your team's style guide.
 // Declaring functions with function syntax, not const
 // BONUS: Add Tailwind classes for same styling of events in daycell and in viewmore-modal
 // BONUS: Why are events already sorted in context/localstorage?
-// BONUS: FIX HEIGHT ACTIVE/INACTIVE DAY
+// *** DONE *** BONUS: FIX HEIGHT ACTIVE/INACTIVE DAY
