@@ -13,9 +13,26 @@ import {
 import Events from "./Events";
 import { useEvents } from "../contexts/EventContext";
 import { useUI } from "../contexts/UIContext";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import MoreEventsButton from "./MoreEventsButton";
+
+const PADDING_CONTAINER = 8;
+const DAY_NUMBER_HEIGHT = 24;
+const EVENT_HEIGHT = 32;
+const MORE_BUTTON_HEIGHT = 16;
 
 export default function Month({ currentMonth }: { currentMonth: Date }) {
+  // Export in context later
+  const [renderEventsNumber, setRenderEventsNumber] = useState<number>(0);
+  const [renderEventsNumberHeader, setRenderEventsNumberHeader] =
+    useState<number>(0);
+  const [renderEventsNumberButtonVisible, setRenderEventsNumberButtonVisible] =
+    useState<number>(0);
+  const [
+    renderEventsNumberHeaderButtonVisible,
+    setRenderEventsNumberHeaderButtonVisible,
+  ] = useState<number>(0);
+
   // Get days of the month
   const today = new Date();
   const startDate = startOfMonth(currentMonth);
@@ -42,25 +59,34 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
   // Create a ref for each day cell
   const dayDivRefs = useRef<Array<HTMLDivElement | null>>([]);
 
-  const checkOverflow = () => {
-    dayDivRefs.current.forEach((ref, index) => {
-      if (ref && ref.scrollHeight > ref.clientHeight) {
-        console.log(`Day cell ${index} is overflowing...`);
-        // Calculate number of events to display
-      } else {
-        console.log(`Day cell ${index} is not overflowing...`);
-      }
-    });
+  const calculateFittingEvents = () => {
+    if (dayDivRefs.current[0]?.clientHeight === undefined) return;
+    const height = dayDivRefs.current[0]?.clientHeight;
+
+    const availableSpaceForEvents =
+      height - PADDING_CONTAINER - DAY_NUMBER_HEIGHT;
+    setRenderEventsNumber(Math.floor(availableSpaceForEvents / EVENT_HEIGHT));
+    setRenderEventsNumberHeader(
+      Math.floor((availableSpaceForEvents - 16) / EVENT_HEIGHT),
+    );
+    setRenderEventsNumberButtonVisible(
+      Math.floor((availableSpaceForEvents - MORE_BUTTON_HEIGHT) / EVENT_HEIGHT),
+    );
+    setRenderEventsNumberHeaderButtonVisible(
+      Math.floor(
+        (availableSpaceForEvents - MORE_BUTTON_HEIGHT - 16) / EVENT_HEIGHT,
+      ),
+    );
   };
 
   // Check on mount, on events change, and on window resize
   useEffect(() => {
-    checkOverflow();
+    calculateFittingEvents();
 
-    window.addEventListener("resize", checkOverflow); // Add resize listener
+    window.addEventListener("resize", calculateFittingEvents); // Add resize listener
 
     return () => {
-      window.removeEventListener("resize", checkOverflow); // Cleanup listener
+      window.removeEventListener("resize", calculateFittingEvents); // Cleanup listener
     };
   }, [events]);
 
@@ -84,7 +110,7 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
             : "bg-custom-grey";
           const opacityClass = isInPast ? "opacity-50" : "opacity-100";
           const todayHighlightClass = isToday(day)
-            ? "bg-todays-day m-auto h-6 w-6 rounded-full text-white"
+            ? "bg-todays-day m-auto h-6 w-6 rounded-full text-white flex justify-center items-center"
             : "";
 
           const dayISO = format(day, "yyyy-MM-dd");
@@ -94,7 +120,7 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
             <div
               ref={(el) => (dayDivRefs.current[index] = el)} // Assign a unique ref for each cell
               key={index}
-              className={`group relative border p-1 text-center ${backgroundClass} ${opacityClass} overflow-hidden`}
+              className={`group relative flex flex-col border p-1 text-center ${backgroundClass} ${opacityClass} overflow-hidden`}
               style={{ height: `calc((100vh - 98px) / ${weeks})` }}
               data-date={dayISO}
             >
@@ -102,7 +128,36 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
               <AddEventButton handleAddEvent={handleAddEvent} />
               <DayNumber todayHighlightClass={todayHighlightClass} day={day} />
 
-              {eventsForDay && <Events eventsForDay={eventsForDay} />}
+              {eventsForDay && (
+                <Events
+                  eventsForDay={eventsForDay}
+                  renderEventsNumber={renderEventsNumber}
+                  renderEventsNumberHeader={renderEventsNumberHeader}
+                  renderEventsNumberButtonVisible={
+                    renderEventsNumberButtonVisible
+                  }
+                  renderEventsNumberHeaderButtonVisible={
+                    renderEventsNumberHeaderButtonVisible
+                  }
+                  isHeaderCell={index <= 6}
+                />
+              )}
+              {/* Dynamic spacer between events and more-events-button */}
+              <div className="flex-1"></div>
+              {eventsForDay && (
+                <MoreEventsButton
+                  eventsForDay={eventsForDay}
+                  renderEventsNumber={renderEventsNumber}
+                  renderEventsNumberHeader={renderEventsNumberHeader}
+                  renderEventsNumberButtonVisible={
+                    renderEventsNumberButtonVisible
+                  }
+                  renderEventsNumberHeaderButtonVisible={
+                    renderEventsNumberHeaderButtonVisible
+                  }
+                  isHeaderCell={index <= 6}
+                />
+              )}
             </div>
           );
         })}
@@ -113,7 +168,7 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
 
 function DayName({ index, day }: { index: number; day: Date }) {
   return (
-    <div className="text-week-name">
+    <div className="text-week-name text-xs">
       {index <= 6 && format(day, "EEE").toUpperCase()}
     </div>
   );
@@ -124,12 +179,14 @@ function DayNumber({
   day,
 }: {
   todayHighlightClass:
-    | "bg-todays-day m-auto h-6 w-6 rounded-full text-white"
+    | "bg-todays-day m-auto h-6 w-6 rounded-full text-white flex justify-center items-center"
     | "";
   day: Date;
 }) {
   return (
-    <div className={`mb-1 ${todayHighlightClass}`}>{format(day, "d")}</div>
+    <div className={`mb-1 ${todayHighlightClass} text-sm`}>
+      {format(day, "d")}
+    </div>
   );
 }
 
