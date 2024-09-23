@@ -90,6 +90,7 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
     };
   }, [events]);
 
+  // EXPORT TO OWN COMPONENT
   const handleAddEvent = (event: React.MouseEvent<HTMLButtonElement>) => {
     const date = event.currentTarget.parentElement?.getAttribute("data-date");
     if (date) {
@@ -120,7 +121,7 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
             <div
               ref={(el) => (dayDivRefs.current[index] = el)} // Assign a unique ref for each cell
               key={index}
-              className={`group relative flex flex-col border p-1 text-center ${backgroundClass} ${opacityClass} overflow-hidden`}
+              className={`group relative flex flex-col items-center border p-1 text-center ${backgroundClass} ${opacityClass} overflow-hidden`}
               style={{ height: `calc((100vh - 98px) / ${weeks})` }}
               data-date={dayISO}
             >
@@ -190,6 +191,7 @@ function DayNumber({
   );
 }
 
+// EXPORT TO OWN COMPONENT
 function AddEventButton({
   handleAddEvent,
 }: {

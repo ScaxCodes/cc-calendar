@@ -5,6 +5,7 @@ import Month from "./Month";
 import { AddEventModal } from "./AddEventModal";
 import { EditEventModal } from "./EditEventModal";
 import { useUI } from "../contexts/UIContext";
+import { MoreEventsModal } from "./MoreEventsModal";
 
 export function Calendar() {
   const {
@@ -16,6 +17,8 @@ export function Calendar() {
     setIsAddEventModalOpen,
     isEditEventModalOpen,
     setIsEditEventModalOpen,
+    isMoreEventsModalOpen,
+    setIsMoreEventsModalOpen,
   } = useUI(); // Get these from context
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -31,6 +34,11 @@ export function Calendar() {
     setIsEditEventModalOpen(false);
   }
 
+  function handleCloseMoreEventsModal() {
+    setSelectedDate(null);
+    setIsMoreEventsModalOpen(false);
+  }
+
   return (
     <EventProvider>
       <div className="text-default m-auto flex h-screen max-w-[1500px] flex-col">
@@ -44,6 +52,9 @@ export function Calendar() {
         )}
         {isEditEventModalOpen && selectedDate && selectedEventId && (
           <EditEventModal onClose={handleCloseEditEventModal} />
+        )}
+        {isMoreEventsModalOpen && selectedDate && (
+          <MoreEventsModal onClose={handleCloseMoreEventsModal} />
         )}
       </div>
     </EventProvider>
@@ -62,3 +73,4 @@ export function Calendar() {
 // Like ADD/EDIT Modal
 // BONUS: Code Consistency: Maintain consistency in coding styles (e.g., naming conventions, file structure) across the entire project. Check if it's aligned with your team's style guide.
 // Declaring functions with function syntax, not const
+// BONUS: Add Tailwind classes for same styling of events in daycell and in viewmore-modal

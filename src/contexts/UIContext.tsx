@@ -10,6 +10,8 @@ type UIContextType = {
   setIsAddEventModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isEditEventModalOpen: boolean;
   setIsEditEventModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isMoreEventsModalOpen: boolean;
+  setIsMoreEventsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 // Create the context with undefined as the default value
@@ -23,6 +25,7 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [isAddEventModalOpen, setIsAddEventModalOpen] = useState(false);
   const [isEditEventModalOpen, setIsEditEventModalOpen] = useState(false);
+  const [isMoreEventsModalOpen, setIsMoreEventsModalOpen] = useState(false);
 
   return (
     <UIContext.Provider
@@ -35,6 +38,8 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsAddEventModalOpen,
         isEditEventModalOpen,
         setIsEditEventModalOpen,
+        isMoreEventsModalOpen,
+        setIsMoreEventsModalOpen,
       }}
     >
       {children}
