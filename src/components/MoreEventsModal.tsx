@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useEvents } from "../contexts/EventContext";
 import { useUI } from "../contexts/UIContext";
 import { convertDateForModal } from "../utils/convertDateForModal";
@@ -18,6 +19,22 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
   const eventsForDay = events[selectedDate];
   const eventsForDaySorted = sortEvents(eventsForDay);
 
+  // New state to control animation
+  const [isAnimatingIn, setIsAnimatingIn] = useState(false);
+
+  // Trigger animation after mounting the component
+  useEffect(() => {
+    setIsAnimatingIn(true);
+  }, []);
+
+  // To ensure we have a smooth transition before closing the modal
+  function onCloseWrapper() {
+    setIsAnimatingIn(false);
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  }
+
   const handleEditEvent = (id: string) => {
     setSelectedEventId(id); // Use context to set selected event ID
     setIsEditEventModalOpen(true); // Use context to open edit modal
@@ -25,13 +42,20 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-96 rounded bg-white p-6 shadow-lg">
+    <div className="fixed inset-0 flex items-center justify-center">
+      <div
+        className={`fixed inset-0 bg-black transition-opacity duration-300 ${isAnimatingIn ? "opacity-50" : "opacity-0"}`}
+      ></div>
+      <div
+        className={`w-96 transform rounded bg-white p-6 shadow-lg transition-transform duration-300 ${
+          isAnimatingIn ? "scale-100" : "scale-0"
+        }`}
+      >
         <div className="mb-4 flex items-center justify-between">
           <span className="text-modal-date-header text-2xl">
             {convertDateForModal(selectedDate)}
           </span>
-          <button onClick={onClose} className="text-3xl">
+          <button onClick={onCloseWrapper} className="text-3xl">
             &#215;
           </button>
         </div>

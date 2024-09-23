@@ -76,3 +76,4 @@ export function Calendar() {
 // Declaring functions with function syntax, not const
 // BONUS: Add Tailwind classes for same styling of events in daycell and in viewmore-modal
 // BONUS: Why are events already sorted in context/localstorage?
+// BONUS: FIX HEIGHT ACTIVE/INACTIVE DAY

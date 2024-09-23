@@ -9,9 +9,9 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
   if (selectedDate === null)
     throw new Error("No valid date string available for modal functionality!");
 
-  const [selectedEvent] = events[selectedDate].filter(
-    (event) => event.id === selectedEventId,
-  );
+  // Default values needed for fade-out-modal after deletion of an event
+  const [selectedEvent] =
+    events[selectedDate]?.filter((event) => event.id === selectedEventId) || [];
 
   // Using useRef for fields that don't need to trigger re-renders
   const nameRef = useRef<HTMLInputElement>(null);
@@ -19,22 +19,34 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
   const endTimeRef = useRef<HTMLInputElement>(null);
 
   // State for fields that require reactivity
-  const [allDay, setAllDay] = useState(selectedEvent.allDay);
-  const [selectedColor, setSelectedColor] = useState(selectedEvent.color);
+  // Default values needed for fade-out-modal after deletion of an event
+  const [allDay, setAllDay] = useState(selectedEvent?.allDay ?? false);
+  const [selectedColor, setSelectedColor] = useState(
+    selectedEvent?.color ?? "red",
+  );
   // Additional state to track start time for form validation
-  const [startTime, setStartTime] = useState(selectedEvent.startTime);
+  const [startTime, setStartTime] = useState(selectedEvent?.startTime ?? "");
 
+  // Default values needed for fade-out-modal after deletion of an event
   useEffect(() => {
     if (nameRef.current) {
-      nameRef.current.value = selectedEvent.name;
+      nameRef.current.value = selectedEvent?.name ?? "";
     }
     if (startTimeRef.current) {
-      startTimeRef.current.value = selectedEvent.startTime;
+      startTimeRef.current.value = selectedEvent?.startTime ?? "";
     }
     if (endTimeRef.current) {
-      endTimeRef.current.value = selectedEvent.endTime;
+      endTimeRef.current.value = selectedEvent?.endTime ?? "";
     }
   }, [selectedEvent]);
+
+  // New state to control animation
+  const [isAnimatingIn, setIsAnimatingIn] = useState(false);
+
+  // Trigger animation after mounting the component
+  useEffect(() => {
+    setIsAnimatingIn(true);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +62,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
 
     // Edit event via context method
     editEvent(selectedDate, editedEvent);
-    onClose(); // Close modal after submission
+    onCloseWrapper(); // Close modal after submission
   };
 
   const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,19 +70,35 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
   };
 
   function handleDelete() {
+    onCloseWrapper();
+    // TODO: DELETE AFTER onClose();
     deleteEvent(selectedDate, selectedEventId);
-    onClose();
+  }
+
+  // To ensure we have a smooth transition before closing the modal
+  function onCloseWrapper() {
+    setIsAnimatingIn(false);
+    setTimeout(() => {
+      onClose();
+    }, 300);
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-96 rounded bg-white p-6 shadow-lg">
+    <div className="fixed inset-0 flex items-center justify-center">
+      <div
+        className={`fixed inset-0 bg-black transition-opacity duration-300 ${isAnimatingIn ? "opacity-50" : "opacity-0"}`}
+      ></div>
+      <div
+        className={`w-96 transform rounded bg-white p-6 shadow-lg transition-transform duration-300 ${
+          isAnimatingIn ? "scale-100" : "scale-0"
+        }`}
+      >
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold">Edit Event</h2>
           <span className="text-modal-date-header">
             {convertDateForModal(selectedDate)}
           </span>
-          <button onClick={onClose}>X</button>
+          <button onClick={onCloseWrapper}>X</button>
         </div>
         <form onSubmit={handleSubmit}>
           {/* Event Name */}
