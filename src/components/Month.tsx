@@ -13,6 +13,7 @@ import {
 import Events from "./Events";
 import { useEvents } from "../contexts/EventContext";
 import { useUI } from "../contexts/UIContext";
+import { useEffect, useRef } from "react";
 
 export default function Month({ currentMonth }: { currentMonth: Date }) {
   // Get days of the month
@@ -37,6 +38,31 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
 
   const { setSelectedDate, setIsAddEventModalOpen } = useUI(); // Get these from context
   const { events } = useEvents();
+
+  // Create a ref for each day cell
+  const dayDivRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  const checkOverflow = () => {
+    dayDivRefs.current.forEach((ref, index) => {
+      if (ref && ref.scrollHeight > ref.clientHeight) {
+        console.log(`Day cell ${index} is overflowing...`);
+        // Calculate number of events to display
+      } else {
+        console.log(`Day cell ${index} is not overflowing...`);
+      }
+    });
+  };
+
+  // Check on mount, on events change, and on window resize
+  useEffect(() => {
+    checkOverflow();
+
+    window.addEventListener("resize", checkOverflow); // Add resize listener
+
+    return () => {
+      window.removeEventListener("resize", checkOverflow); // Cleanup listener
+    };
+  }, [events]);
 
   const handleAddEvent = (event: React.MouseEvent<HTMLButtonElement>) => {
     const date = event.currentTarget.parentElement?.getAttribute("data-date");
@@ -66,6 +92,7 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
 
           return (
             <div
+              ref={(el) => (dayDivRefs.current[index] = el)} // Assign a unique ref for each cell
               key={index}
               className={`group relative border p-1 text-center ${backgroundClass} ${opacityClass} overflow-hidden`}
               style={{ height: `calc((100vh - 98px) / ${weeks})` }}
