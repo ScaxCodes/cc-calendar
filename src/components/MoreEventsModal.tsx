@@ -5,12 +5,7 @@ import { convertDateForModal } from "../utils/convertDateForModal";
 import { sortEvents } from "../utils/sortEvents";
 
 export function MoreEventsModal({ onClose }: { onClose: () => void }) {
-  const {
-    selectedDate,
-    setSelectedEventId,
-    setIsEditEventModalOpen,
-    setIsMoreEventsModalOpen,
-  } = useUI();
+  const { selectedDate, setSelectedEventId, setIsEditEventModalOpen } = useUI();
   const { events } = useEvents();
 
   if (selectedDate === null) {
@@ -38,11 +33,10 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
   const handleEditEvent = (id: string) => {
     setSelectedEventId(id); // Use context to set selected event ID
     setIsEditEventModalOpen(true); // Use context to open edit modal
-    setIsMoreEventsModalOpen(false);
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center">
+    <div className="fixed inset-0 z-0 flex items-center justify-center">
       <div
         className={`fixed inset-0 bg-black transition-opacity duration-300 ${isAnimatingIn ? "opacity-50" : "opacity-0"}`}
       ></div>

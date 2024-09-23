@@ -29,7 +29,7 @@ export function Calendar() {
   }
 
   function handleCloseEditEventModal() {
-    setSelectedDate(null);
+    if (!isMoreEventsModalOpen) setSelectedDate(null);
     setSelectedEventId(null);
     setIsEditEventModalOpen(false);
   }
@@ -70,10 +70,10 @@ export function Calendar() {
 // *** DONE *** 4: Overflow modal
 // *** DONE *** 5: Open/Closing animation for modal
 // *** DONE *** 6: Style hover add event button
+// *** DONE *** 7: [03:23] Let MoreEventsModal open after selecting an event
 // BONUS: Duplication and DRY Principle: Check if there's any duplicated logic that can be abstracted into reusable hooks or utility functions.
 // Like ADD/EDIT Modal
 // BONUS: Code Consistency: Maintain consistency in coding styles (e.g., naming conventions, file structure) across the entire project. Check if it's aligned with your team's style guide.
 // Declaring functions with function syntax, not const
 // BONUS: Add Tailwind classes for same styling of events in daycell and in viewmore-modal
 // BONUS: Why are events already sorted in context/localstorage?
-// *** DONE *** BONUS: FIX HEIGHT ACTIVE/INACTIVE DAY

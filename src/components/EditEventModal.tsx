@@ -71,7 +71,6 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
 
   function handleDelete() {
     onCloseWrapper();
-    // TODO: DELETE AFTER onClose();
     deleteEvent(selectedDate, selectedEventId);
   }
 
@@ -84,7 +83,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center">
+    <div className="fixed inset-0 z-10 flex items-center justify-center">
       <div
         className={`fixed inset-0 bg-black transition-opacity duration-300 ${isAnimatingIn ? "opacity-50" : "opacity-0"}`}
       ></div>
