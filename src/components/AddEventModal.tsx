@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useEvents, EventForm } from "../contexts/EventContext";
 import { convertDateForModal } from "../utils/convertDateForModal";
 import { useUI } from "../contexts/UIContext";
@@ -18,6 +18,14 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
   // Additional state to track start time for form validation
   const [startTime, setStartTime] = useState<string | null>(null);
 
+  // New state to control animation
+  const [isAnimatingIn, setIsAnimatingIn] = useState(false);
+
+  // Trigger animation after mounting the component
+  useEffect(() => {
+    setIsAnimatingIn(true);
+  }, []);
+
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,19 +44,35 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
     onClose(); // Close modal after adding the event
   };
 
+  // To ensure we have a smooth transition before closing the modal
+  function onCloseWrapper() {
+    setIsAnimatingIn(false);
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  }
+
   const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStartTime(e.target.value);
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-96 rounded bg-white p-6 shadow-lg">
+    <div className="fixed inset-0 flex items-center justify-center">
+      <div
+        className={`fixed inset-0 bg-black transition-opacity duration-300 ${isAnimatingIn ? "opacity-50" : "opacity-0"}`}
+      ></div>
+      <div
+        className={`w-96 transform rounded bg-white p-6 shadow-lg transition-transform duration-300 ${
+          isAnimatingIn ? "scale-100" : "scale-0"
+        }`}
+      >
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-3xl">Add Event</h2>
           <span className="text-modal-date-header text-2xl">
             {convertDateForModal(selectedDate)}
           </span>
-          <button onClick={onClose} className="text-3xl">
+          {/* <button onClick={onClose} className="text-3xl"> */}
+          <button onClick={onCloseWrapper} className="text-3xl">
             &#215;
           </button>
         </div>
