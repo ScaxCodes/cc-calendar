@@ -1,37 +1,24 @@
 import { EventForm } from "../contexts/EventContext";
-import { useUI } from "../contexts/UIContext"; // Import the context
+import { useUI } from "../contexts/UIContext";
 import { sortEvents } from "../utils/sortEvents";
 
 export default function Events({
   eventsForDay,
   isHeaderCell,
+  onClick,
 }: {
   eventsForDay: EventForm[];
   isHeaderCell: boolean;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>, id: string) => void;
 }) {
   const {
-    setSelectedDate,
-    setSelectedEventId,
-    setIsEditEventModalOpen,
     amountEventsToRender,
     amountEventsToRenderForHeader,
     amountEventsToRenderIfButtonVisible,
     amountEventsToRenderIfButtonVisibleForHeader,
-  } = useUI(); // Get the necessary functions from context
+  } = useUI();
 
   const eventsForDaySorted = sortEvents(eventsForDay);
-
-  const handleEditEvent = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    id: string,
-  ) => {
-    const date = event.currentTarget.parentElement?.getAttribute("data-date");
-    if (date) {
-      setSelectedDate(date); // Use context to set selected date
-      setSelectedEventId(id); // Use context to set selected event ID
-      setIsEditEventModalOpen(true); // Use context to open edit modal
-    }
-  };
 
   let renderLimit = isHeaderCell
     ? amountEventsToRenderForHeader
@@ -52,7 +39,7 @@ export default function Events({
         return (
           <button
             key={singleEvent.id}
-            onClick={(event) => handleEditEvent(event, singleEvent.id)}
+            onClick={(event) => onClick(event, singleEvent.id)}
             className="mb-2 w-full overflow-hidden whitespace-nowrap text-left"
           >
             <div className="flex items-center">

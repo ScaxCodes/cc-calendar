@@ -50,11 +50,13 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
   const {
     setSelectedDate,
     setIsAddEventModalOpen,
+    setSelectedEventId,
+    setIsEditEventModalOpen,
     SetAmountEventsToRender,
     SetAmountEventsToRenderForHeader,
     SetAmountEventsToRenderIfButtonVisible,
     SetAmountEventsToRenderIfButtonVisibleForHeader,
-  } = useUI(); // Get these from context
+  } = useUI();
   const { events } = useEvents();
 
   // Create an array of refs for the day-cells
@@ -101,6 +103,18 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
     }
   }
 
+  function handleEditEvent(
+    event: React.MouseEvent<HTMLButtonElement>,
+    id: string,
+  ) {
+    const date = event.currentTarget.parentElement?.getAttribute("data-date");
+    if (date) {
+      setSelectedDate(date);
+      setSelectedEventId(id);
+      setIsEditEventModalOpen(true);
+    }
+  }
+
   return (
     <main className="flex flex-1 flex-col p-4">
       <div className="grid flex-1 auto-rows-fr grid-cols-7">
@@ -131,7 +145,11 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
               <AddEventButton onClick={handleAddEvent} />
               <DayNumber todayHighlightClass={todayHighlightClass} day={day} />
               {eventsForDay && (
-                <Events eventsForDay={eventsForDay} isHeaderCell={index <= 6} />
+                <Events
+                  eventsForDay={eventsForDay}
+                  isHeaderCell={index <= 6}
+                  onClick={handleEditEvent}
+                />
               )}
               {/* Dynamic-growing-spacer between events and more-events-button */}
               <div className="flex-1"></div>
