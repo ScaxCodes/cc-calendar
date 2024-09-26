@@ -32,10 +32,11 @@ export default function Events({
       : amountEventsToRenderIfButtonVisible;
   }
 
+  const eventsToRender = eventsForDaySorted.slice(0, renderLimit);
+
   return (
     <>
-      {eventsForDaySorted.map((singleEvent, index) => {
-        if (index + 1 > renderLimit) return;
+      {eventsToRender.map((singleEvent) => {
         return (
           <button
             key={singleEvent.id}
