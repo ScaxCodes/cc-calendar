@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import {
   format,
   startOfMonth,
@@ -13,24 +14,26 @@ import {
 import Events from "./Events";
 import { useEvents } from "../contexts/EventContext";
 import { useUI } from "../contexts/UIContext";
-import { useEffect, useRef, useState } from "react";
 import MoreEventsButton from "./MoreEventsButton";
 
+// Constants for size-calculation of day-cell for dynamic "+X More" button
 const PADDING_CONTAINER = 8;
 const DAY_NUMBER_HEIGHT = 24;
 const EVENT_HEIGHT = 32;
 const MORE_BUTTON_HEIGHT = 16;
 
-export default function Month({ currentMonth }: { currentMonth: Date }) {
+export function Month({ currentMonth }: { currentMonth: Date }) {
   // Export in context later
-  const [renderEventsNumber, setRenderEventsNumber] = useState<number>(0);
-  const [renderEventsNumberHeader, setRenderEventsNumberHeader] =
-    useState<number>(0);
-  const [renderEventsNumberButtonVisible, setRenderEventsNumberButtonVisible] =
+  const [amountEventsToRender, SetAmountEventsToRender] = useState<number>(0);
+  const [amountEventsToRenderForHeader, SetAmountEventsToRenderForHeader] =
     useState<number>(0);
   const [
-    renderEventsNumberHeaderButtonVisible,
-    setRenderEventsNumberHeaderButtonVisible,
+    amountEventsToRenderIfButtonVisible,
+    SetAmountEventsToRenderIfButtonVisible,
+  ] = useState<number>(0);
+  const [
+    amountEventsToRenderIfButtonVisibleForHeader,
+    SetAmountEventsToRenderIfButtonVisibleForHeader,
   ] = useState<number>(0);
 
   // Get days of the month
@@ -65,14 +68,14 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
 
     const availableSpaceForEvents =
       height - PADDING_CONTAINER - DAY_NUMBER_HEIGHT;
-    setRenderEventsNumber(Math.floor(availableSpaceForEvents / EVENT_HEIGHT));
-    setRenderEventsNumberHeader(
+    SetAmountEventsToRender(Math.floor(availableSpaceForEvents / EVENT_HEIGHT));
+    SetAmountEventsToRenderForHeader(
       Math.floor((availableSpaceForEvents - 16) / EVENT_HEIGHT),
     );
-    setRenderEventsNumberButtonVisible(
+    SetAmountEventsToRenderIfButtonVisible(
       Math.floor((availableSpaceForEvents - MORE_BUTTON_HEIGHT) / EVENT_HEIGHT),
     );
-    setRenderEventsNumberHeaderButtonVisible(
+    SetAmountEventsToRenderIfButtonVisibleForHeader(
       Math.floor(
         (availableSpaceForEvents - MORE_BUTTON_HEIGHT - 16) / EVENT_HEIGHT,
       ),
@@ -132,13 +135,13 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
               {eventsForDay && (
                 <Events
                   eventsForDay={eventsForDay}
-                  renderEventsNumber={renderEventsNumber}
-                  renderEventsNumberHeader={renderEventsNumberHeader}
-                  renderEventsNumberButtonVisible={
-                    renderEventsNumberButtonVisible
+                  amountEventsToRender={amountEventsToRender}
+                  amountEventsToRenderForHeader={amountEventsToRenderForHeader}
+                  amountEventsToRenderIfButtonVisible={
+                    amountEventsToRenderIfButtonVisible
                   }
-                  renderEventsNumberHeaderButtonVisible={
-                    renderEventsNumberHeaderButtonVisible
+                  amountEventsToRenderIfButtonVisibleForHeader={
+                    amountEventsToRenderIfButtonVisibleForHeader
                   }
                   isHeaderCell={index <= 6}
                 />
@@ -148,13 +151,13 @@ export default function Month({ currentMonth }: { currentMonth: Date }) {
               {eventsForDay && (
                 <MoreEventsButton
                   eventsForDay={eventsForDay}
-                  renderEventsNumber={renderEventsNumber}
-                  renderEventsNumberHeader={renderEventsNumberHeader}
-                  renderEventsNumberButtonVisible={
-                    renderEventsNumberButtonVisible
+                  amountEventsToRender={amountEventsToRender}
+                  amountEventsToRenderForHeader={amountEventsToRenderForHeader}
+                  amountEventsToRenderIfButtonVisible={
+                    amountEventsToRenderIfButtonVisible
                   }
-                  renderEventsNumberHeaderButtonVisible={
-                    renderEventsNumberHeaderButtonVisible
+                  amountEventsToRenderIfButtonVisibleForHeader={
+                    amountEventsToRenderIfButtonVisibleForHeader
                   }
                   isHeaderCell={index <= 6}
                 />

@@ -1,14 +1,16 @@
 import { format, subMonths, addMonths } from "date-fns";
 
-export default function Navigation({
+export function Navigation({
   currentMonth,
   setCurrentMonth,
 }: {
   currentMonth: Date;
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
 }) {
-  const handlePreviousMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
-  const handleNextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
+  const handlePreviousMonthSelection = () =>
+    setCurrentMonth(subMonths(currentMonth, 1));
+  const handleNextMonthSelection = () =>
+    setCurrentMonth(addMonths(currentMonth, 1));
 
   return (
     <nav className="my-4 ml-4 flex items-center gap-4">
@@ -18,8 +20,8 @@ export default function Navigation({
       >
         Today
       </button>
-      <button onClick={handlePreviousMonth}>&lt;</button>
-      <button onClick={handleNextMonth}>&gt;</button>
+      <button onClick={handlePreviousMonthSelection}>&lt;</button>
+      <button onClick={handleNextMonthSelection}>&gt;</button>
       <span className="font-semibold">{format(currentMonth, "MMMM yyyy")}</span>
     </nav>
   );

@@ -3,29 +3,29 @@ import { useUI } from "../contexts/UIContext";
 
 export default function MoreEventsButton({
   eventsForDay,
-  renderEventsNumber,
-  renderEventsNumberHeader,
-  renderEventsNumberButtonVisible,
-  renderEventsNumberHeaderButtonVisible,
+  amountEventsToRender,
+  amountEventsToRenderForHeader,
+  amountEventsToRenderIfButtonVisible,
+  amountEventsToRenderIfButtonVisibleForHeader,
   isHeaderCell,
 }: {
   eventsForDay: EventForm[];
-  renderEventsNumber: number;
-  renderEventsNumberHeader: number;
-  renderEventsNumberButtonVisible: number;
-  renderEventsNumberHeaderButtonVisible: number;
+  amountEventsToRender: number;
+  amountEventsToRenderForHeader: number;
+  amountEventsToRenderIfButtonVisible: number;
+  amountEventsToRenderIfButtonVisibleForHeader: number;
   isHeaderCell: boolean;
 }) {
   let renderLimit = isHeaderCell
-    ? renderEventsNumberHeader
-    : renderEventsNumber;
+    ? amountEventsToRenderForHeader
+    : amountEventsToRender;
 
   const eventsAreHidden = eventsForDay.length - renderLimit > 0;
 
   if (eventsAreHidden) {
     renderLimit = isHeaderCell
-      ? renderEventsNumberHeaderButtonVisible
-      : renderEventsNumberButtonVisible;
+      ? amountEventsToRenderIfButtonVisibleForHeader
+      : amountEventsToRenderIfButtonVisible;
 
     const numberOfHiddenEvents = eventsForDay.length - renderLimit;
 

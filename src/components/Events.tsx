@@ -4,17 +4,17 @@ import { sortEvents } from "../utils/sortEvents";
 
 export default function Events({
   eventsForDay,
-  renderEventsNumber,
-  renderEventsNumberHeader,
-  renderEventsNumberButtonVisible,
-  renderEventsNumberHeaderButtonVisible,
+  amountEventsToRender,
+  amountEventsToRenderForHeader,
+  amountEventsToRenderIfButtonVisible,
+  amountEventsToRenderIfButtonVisibleForHeader,
   isHeaderCell,
 }: {
   eventsForDay: EventForm[];
-  renderEventsNumber: number;
-  renderEventsNumberHeader: number;
-  renderEventsNumberButtonVisible: number;
-  renderEventsNumberHeaderButtonVisible: number;
+  amountEventsToRender: number;
+  amountEventsToRenderForHeader: number;
+  amountEventsToRenderIfButtonVisible: number;
+  amountEventsToRenderIfButtonVisibleForHeader: number;
   isHeaderCell: boolean;
 }) {
   const { setSelectedDate, setSelectedEventId, setIsEditEventModalOpen } =
@@ -35,15 +35,15 @@ export default function Events({
   };
 
   let renderLimit = isHeaderCell
-    ? renderEventsNumberHeader
-    : renderEventsNumber;
+    ? amountEventsToRenderForHeader
+    : amountEventsToRender;
 
   const eventsAreHidden = eventsForDay.length - renderLimit > 0;
 
   if (eventsAreHidden) {
     renderLimit = isHeaderCell
-      ? renderEventsNumberHeaderButtonVisible
-      : renderEventsNumberButtonVisible;
+      ? amountEventsToRenderIfButtonVisibleForHeader
+      : amountEventsToRenderIfButtonVisible;
   }
 
   return (
