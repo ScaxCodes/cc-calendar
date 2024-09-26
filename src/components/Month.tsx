@@ -52,6 +52,7 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
     setIsAddEventModalOpen,
     setSelectedEventId,
     setIsEditEventModalOpen,
+    setIsMoreEventsModalOpen,
     SetAmountEventsToRender,
     SetAmountEventsToRenderForHeader,
     SetAmountEventsToRenderIfButtonVisible,
@@ -115,6 +116,16 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
     }
   }
 
+  function handleOpenMoreEventsModal(
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) {
+    const date = event.currentTarget.parentElement?.getAttribute("data-date");
+    if (date) {
+      setSelectedDate(date);
+      setIsMoreEventsModalOpen(true);
+    }
+  }
+
   return (
     <main className="flex flex-1 flex-col p-4">
       <div className="grid flex-1 auto-rows-fr grid-cols-7">
@@ -157,6 +168,7 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
                 <MoreEventsButton
                   eventsForDay={eventsForDay}
                   isHeaderCell={index <= 6}
+                  onClick={handleOpenMoreEventsModal}
                 />
               )}
             </div>

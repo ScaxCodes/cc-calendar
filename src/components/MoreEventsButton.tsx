@@ -4,13 +4,13 @@ import { useUI } from "../contexts/UIContext";
 export default function MoreEventsButton({
   eventsForDay,
   isHeaderCell,
+  onClick,
 }: {
   eventsForDay: EventForm[];
   isHeaderCell: boolean;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
   const {
-    setSelectedDate,
-    setIsMoreEventsModalOpen,
     amountEventsToRender,
     amountEventsToRenderForHeader,
     amountEventsToRenderIfButtonVisible,
@@ -30,18 +30,8 @@ export default function MoreEventsButton({
 
     const numberOfHiddenEvents = eventsForDay.length - renderLimit;
 
-    const handleShowModal = (event: React.MouseEvent<HTMLButtonElement>) => {
-      const date = event.currentTarget.parentElement?.getAttribute("data-date");
-      if (date) {
-        setSelectedDate(date); // Use context instead of props
-        setIsMoreEventsModalOpen(true); // Use context instead of props
-      }
-    };
-
     return (
-      // For debugging
-      // <button className="w-fit bg-indigo-500 text-xs font-bold">
-      <button className="text-xs font-bold" onClick={handleShowModal}>
+      <button className="text-xs font-bold" onClick={onClick}>
         +{numberOfHiddenEvents} More
       </button>
     );
