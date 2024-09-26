@@ -4,21 +4,20 @@ import { sortEvents } from "../utils/sortEvents";
 
 export default function Events({
   eventsForDay,
-  amountEventsToRender,
-  amountEventsToRenderForHeader,
-  amountEventsToRenderIfButtonVisible,
-  amountEventsToRenderIfButtonVisibleForHeader,
   isHeaderCell,
 }: {
   eventsForDay: EventForm[];
-  amountEventsToRender: number;
-  amountEventsToRenderForHeader: number;
-  amountEventsToRenderIfButtonVisible: number;
-  amountEventsToRenderIfButtonVisibleForHeader: number;
   isHeaderCell: boolean;
 }) {
-  const { setSelectedDate, setSelectedEventId, setIsEditEventModalOpen } =
-    useUI(); // Get the necessary functions from context
+  const {
+    setSelectedDate,
+    setSelectedEventId,
+    setIsEditEventModalOpen,
+    amountEventsToRender,
+    amountEventsToRenderForHeader,
+    amountEventsToRenderIfButtonVisible,
+    amountEventsToRenderIfButtonVisibleForHeader,
+  } = useUI(); // Get the necessary functions from context
 
   const eventsForDaySorted = sortEvents(eventsForDay);
 

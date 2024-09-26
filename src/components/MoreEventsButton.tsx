@@ -3,19 +3,20 @@ import { useUI } from "../contexts/UIContext";
 
 export default function MoreEventsButton({
   eventsForDay,
-  amountEventsToRender,
-  amountEventsToRenderForHeader,
-  amountEventsToRenderIfButtonVisible,
-  amountEventsToRenderIfButtonVisibleForHeader,
   isHeaderCell,
 }: {
   eventsForDay: EventForm[];
-  amountEventsToRender: number;
-  amountEventsToRenderForHeader: number;
-  amountEventsToRenderIfButtonVisible: number;
-  amountEventsToRenderIfButtonVisibleForHeader: number;
   isHeaderCell: boolean;
 }) {
+  const {
+    setSelectedDate,
+    setIsMoreEventsModalOpen,
+    amountEventsToRender,
+    amountEventsToRenderForHeader,
+    amountEventsToRenderIfButtonVisible,
+    amountEventsToRenderIfButtonVisibleForHeader,
+  } = useUI();
+
   let renderLimit = isHeaderCell
     ? amountEventsToRenderForHeader
     : amountEventsToRender;
@@ -28,8 +29,6 @@ export default function MoreEventsButton({
       : amountEventsToRenderIfButtonVisible;
 
     const numberOfHiddenEvents = eventsForDay.length - renderLimit;
-
-    const { setSelectedDate, setIsMoreEventsModalOpen } = useUI();
 
     const handleShowModal = (event: React.MouseEvent<HTMLButtonElement>) => {
       const date = event.currentTarget.parentElement?.getAttribute("data-date");

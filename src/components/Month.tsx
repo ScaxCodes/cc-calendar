@@ -23,19 +23,6 @@ const EVENT_HEIGHT = 32;
 const MORE_BUTTON_HEIGHT = 16;
 
 export function Month({ currentMonth }: { currentMonth: Date }) {
-  // Export in context later
-  const [amountEventsToRender, SetAmountEventsToRender] = useState<number>(0);
-  const [amountEventsToRenderForHeader, SetAmountEventsToRenderForHeader] =
-    useState<number>(0);
-  const [
-    amountEventsToRenderIfButtonVisible,
-    SetAmountEventsToRenderIfButtonVisible,
-  ] = useState<number>(0);
-  const [
-    amountEventsToRenderIfButtonVisibleForHeader,
-    SetAmountEventsToRenderIfButtonVisibleForHeader,
-  ] = useState<number>(0);
-
   // Get days of the month
   const today = new Date();
   const startDate = startOfMonth(currentMonth);
@@ -56,7 +43,14 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
   const totalDays = differenceInDays(end, start);
   const weeks = Math.ceil(totalDays / 7);
 
-  const { setSelectedDate, setIsAddEventModalOpen } = useUI(); // Get these from context
+  const {
+    setSelectedDate,
+    setIsAddEventModalOpen,
+    SetAmountEventsToRender,
+    SetAmountEventsToRenderForHeader,
+    SetAmountEventsToRenderIfButtonVisible,
+    SetAmountEventsToRenderIfButtonVisibleForHeader,
+  } = useUI(); // Get these from context
   const { events } = useEvents();
 
   // Create a ref for each day cell
@@ -133,32 +127,13 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
               <DayNumber todayHighlightClass={todayHighlightClass} day={day} />
 
               {eventsForDay && (
-                <Events
-                  eventsForDay={eventsForDay}
-                  amountEventsToRender={amountEventsToRender}
-                  amountEventsToRenderForHeader={amountEventsToRenderForHeader}
-                  amountEventsToRenderIfButtonVisible={
-                    amountEventsToRenderIfButtonVisible
-                  }
-                  amountEventsToRenderIfButtonVisibleForHeader={
-                    amountEventsToRenderIfButtonVisibleForHeader
-                  }
-                  isHeaderCell={index <= 6}
-                />
+                <Events eventsForDay={eventsForDay} isHeaderCell={index <= 6} />
               )}
               {/* Dynamic spacer between events and more-events-button */}
               <div className="flex-1"></div>
               {eventsForDay && (
                 <MoreEventsButton
                   eventsForDay={eventsForDay}
-                  amountEventsToRender={amountEventsToRender}
-                  amountEventsToRenderForHeader={amountEventsToRenderForHeader}
-                  amountEventsToRenderIfButtonVisible={
-                    amountEventsToRenderIfButtonVisible
-                  }
-                  amountEventsToRenderIfButtonVisibleForHeader={
-                    amountEventsToRenderIfButtonVisibleForHeader
-                  }
                   isHeaderCell={index <= 6}
                 />
               )}
