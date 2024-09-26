@@ -16,6 +16,8 @@ import { useEvents } from "../contexts/EventContext";
 import { useUI } from "../contexts/UIContext";
 import MoreEventsButton from "./MoreEventsButton";
 import { AddEventButton } from "./AddEventButton";
+import { DayName } from "./DayName";
+import { DayNumber } from "./DayNumber";
 
 // Constants for size-calculation of day-cell for dynamic "+X More" button
 const PADDING_CONTAINER = 8;
@@ -128,7 +130,6 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
               <DayName index={index} day={day} />
               <AddEventButton onClick={handleAddEvent} />
               <DayNumber todayHighlightClass={todayHighlightClass} day={day} />
-
               {eventsForDay && (
                 <Events eventsForDay={eventsForDay} isHeaderCell={index <= 6} />
               )}
@@ -145,29 +146,5 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
         })}
       </div>
     </main>
-  );
-}
-
-function DayName({ index, day }: { index: number; day: Date }) {
-  return (
-    <div className="text-week-name text-xs">
-      {index <= 6 && format(day, "EEE").toUpperCase()}
-    </div>
-  );
-}
-
-function DayNumber({
-  todayHighlightClass,
-  day,
-}: {
-  todayHighlightClass:
-    | "bg-todays-day m-auto h-6 w-6 rounded-full text-white flex justify-center items-center"
-    | "m-auto h-6 w-6 flex justify-center items-center";
-  day: Date;
-}) {
-  return (
-    <div className={`mb-1 ${todayHighlightClass} text-sm`}>
-      {format(day, "d")}
-    </div>
   );
 }
