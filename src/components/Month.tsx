@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   format,
   startOfMonth,
@@ -15,9 +15,11 @@ import Events from "./Events";
 import { useEvents } from "../contexts/EventContext";
 import { useUI } from "../contexts/UIContext";
 import MoreEventsButton from "./MoreEventsButton";
+import { AddEventButton } from "./AddEventButton";
 
 // Constants for size-calculation of day-cell for dynamic "+X More" button
 const PADDING_CONTAINER = 8;
+const DAY_NAME_HEIGHT = 16;
 const DAY_NUMBER_HEIGHT = 24;
 const EVENT_HEIGHT = 32;
 const MORE_BUTTON_HEIGHT = 16;
@@ -53,48 +55,49 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
   } = useUI(); // Get these from context
   const { events } = useEvents();
 
-  // Create a ref for each day cell
+  // Create an array of refs for the day-cells
   const dayDivRefs = useRef<Array<HTMLDivElement | null>>([]);
 
-  const calculateFittingEvents = () => {
+  function calculateFittingEvents() {
     if (dayDivRefs.current[0]?.clientHeight === undefined) return;
     const height = dayDivRefs.current[0]?.clientHeight;
 
     const availableSpaceForEvents =
       height - PADDING_CONTAINER - DAY_NUMBER_HEIGHT;
+
     SetAmountEventsToRender(Math.floor(availableSpaceForEvents / EVENT_HEIGHT));
     SetAmountEventsToRenderForHeader(
-      Math.floor((availableSpaceForEvents - 16) / EVENT_HEIGHT),
+      Math.floor((availableSpaceForEvents - DAY_NAME_HEIGHT) / EVENT_HEIGHT),
     );
     SetAmountEventsToRenderIfButtonVisible(
       Math.floor((availableSpaceForEvents - MORE_BUTTON_HEIGHT) / EVENT_HEIGHT),
     );
     SetAmountEventsToRenderIfButtonVisibleForHeader(
       Math.floor(
-        (availableSpaceForEvents - MORE_BUTTON_HEIGHT - 16) / EVENT_HEIGHT,
+        (availableSpaceForEvents - MORE_BUTTON_HEIGHT - DAY_NAME_HEIGHT) /
+          EVENT_HEIGHT,
       ),
     );
-  };
+  }
 
   // Check on mount, on events change, and on window resize
   useEffect(() => {
     calculateFittingEvents();
 
-    window.addEventListener("resize", calculateFittingEvents); // Add resize listener
+    window.addEventListener("resize", calculateFittingEvents);
 
     return () => {
-      window.removeEventListener("resize", calculateFittingEvents); // Cleanup listener
+      window.removeEventListener("resize", calculateFittingEvents);
     };
   }, [events]);
 
-  // EXPORT TO OWN COMPONENT
-  const handleAddEvent = (event: React.MouseEvent<HTMLButtonElement>) => {
+  function handleAddEvent(event: React.MouseEvent<HTMLButtonElement>) {
     const date = event.currentTarget.parentElement?.getAttribute("data-date");
     if (date) {
-      setSelectedDate(date); // Use context instead of props
-      setIsAddEventModalOpen(true); // Use context instead of props
+      setSelectedDate(date);
+      setIsAddEventModalOpen(true);
     }
-  };
+  }
 
   return (
     <main className="flex flex-1 flex-col p-4">
@@ -116,20 +119,20 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
 
           return (
             <div
-              ref={(el) => (dayDivRefs.current[index] = el)} // Assign a unique ref for each cell
+              ref={(el) => (dayDivRefs.current[index] = el)} // Assign a unique ref for each day-cell
               key={index}
               className={`group relative flex flex-col items-center border p-1 text-center ${backgroundClass} ${opacityClass} overflow-hidden`}
               style={{ height: `calc((100vh - 98px) / ${weeks})` }}
               data-date={dayISO}
             >
               <DayName index={index} day={day} />
-              <AddEventButton handleAddEvent={handleAddEvent} />
+              <AddEventButton onClick={handleAddEvent} />
               <DayNumber todayHighlightClass={todayHighlightClass} day={day} />
 
               {eventsForDay && (
                 <Events eventsForDay={eventsForDay} isHeaderCell={index <= 6} />
               )}
-              {/* Dynamic spacer between events and more-events-button */}
+              {/* Dynamic-growing-spacer between events and more-events-button */}
               <div className="flex-1"></div>
               {eventsForDay && (
                 <MoreEventsButton
@@ -166,21 +169,5 @@ function DayNumber({
     <div className={`mb-1 ${todayHighlightClass} text-sm`}>
       {format(day, "d")}
     </div>
-  );
-}
-
-// EXPORT TO OWN COMPONENT
-function AddEventButton({
-  handleAddEvent,
-}: {
-  handleAddEvent: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}) {
-  return (
-    <button
-      onClick={handleAddEvent}
-      className="hover:bg-today-button-bg-hover absolute right-0 top-0 m-1 hidden h-5 w-5 items-center justify-center rounded-full group-hover:flex"
-    >
-      +
-    </button>
   );
 }
