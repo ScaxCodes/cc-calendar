@@ -33,9 +33,7 @@ const EventContext = createContext<
 
 const LOCAL_STORAGE_KEY = "calendarEvents";
 
-export const EventProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+export function EventProvider({ children }: { children: ReactNode }) {
   // Directly initialize state with localStorage data or empty object if nothing found
   const [events, setEvents] = useState<EventsByDate>(() => {
     const storedEvents = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -47,19 +45,21 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(events));
   }, [events]);
 
-  const addEvent = (date: string | null, eventForm: EventForm) => {
-    if (date === null)
+  function addEvent(date: string | null, eventForm: EventForm) {
+    if (date === null) {
       throw new Error("No valid date string available for adding new event!");
+    }
 
     setEvents((prevEvents) => ({
       ...prevEvents,
       [date]: prevEvents[date] ? [...prevEvents[date], eventForm] : [eventForm],
     }));
-  };
+  }
 
-  const editEvent = (date: string | null, updatedEvent: EventForm) => {
-    if (date === null)
+  function editEvent(date: string | null, updatedEvent: EventForm) {
+    if (date === null) {
       throw new Error("No valid date string available for editing event!");
+    }
 
     setEvents((prevEvents) => ({
       ...prevEvents,
@@ -69,13 +69,15 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
           )
         : [], // If no events exist for that date, return an empty array
     }));
-  };
+  }
 
-  const deleteEvent = (date: string | null, eventId: string | null) => {
-    if (date === null)
+  function deleteEvent(date: string | null, eventId: string | null) {
+    if (date === null) {
       throw new Error("No valid date string available for deleting event!");
-    if (eventId === null)
+    }
+    if (eventId === null) {
       throw new Error("No valid event id available for deleting event!");
+    }
 
     setEvents((prevEvents) => {
       const filteredEvents = prevEvents[date].filter(
@@ -95,20 +97,20 @@ export const EventProvider: React.FC<{ children: ReactNode }> = ({
 
       return newEvents;
     });
-  };
+  }
 
   return (
     <EventContext.Provider value={{ events, addEvent, editEvent, deleteEvent }}>
       {children}
     </EventContext.Provider>
   );
-};
+}
 
 // Custom hook to use events context
-export const useEvents = () => {
+export function useEvents() {
   const context = useContext(EventContext);
   if (!context) {
     throw new Error("useEvents must be used within an EventProvider");
   }
   return context;
-};
+}

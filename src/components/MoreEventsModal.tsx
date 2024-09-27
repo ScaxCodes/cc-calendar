@@ -22,7 +22,7 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
     setIsAnimatingIn(true);
   }, []);
 
-  // To ensure we have a smooth transition before closing the modal
+  // To ensure we await the fade-out animation before we hide the modal
   function onCloseWrapper() {
     setIsAnimatingIn(false);
     setTimeout(() => {
@@ -31,8 +31,8 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
   }
 
   const handleEditEvent = (id: string) => {
-    setSelectedEventId(id); // Use context to set selected event ID
-    setIsEditEventModalOpen(true); // Use context to open edit modal
+    setSelectedEventId(id);
+    setIsEditEventModalOpen(true);
   };
 
   return (

@@ -28,13 +28,10 @@ type UIContextType = {
   >;
 };
 
-// Create the context with undefined as the default value
+// Context setup
 const UIContext = createContext<UIContextType | undefined>(undefined);
 
-// Create a provider component
-export const UIProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export function UIProvider({ children }: { children: React.ReactNode }) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [isAddEventModalOpen, setIsAddEventModalOpen] = useState(false);
@@ -78,13 +75,13 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
     </UIContext.Provider>
   );
-};
+}
 
 // Custom hook to use UI context
-export const useUI = () => {
+export function useUI() {
   const context = useContext(UIContext);
   if (!context) {
     throw new Error("useUI must be used within a UIProvider");
   }
   return context;
-};
+}
