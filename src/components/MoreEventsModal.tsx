@@ -3,6 +3,8 @@ import { useEvents } from "../contexts/EventContext";
 import { useUI } from "../contexts/UIContext";
 import { convertDateForModal } from "../utils/convertDateForModal";
 import { sortEvents } from "../utils/sortEvents";
+import { useEscapeKey } from "../hooks/useEscapeKey";
+import { awaitAnimationBeforeClosing } from "../utils/awaitAnimationBeforeClosing";
 
 export function MoreEventsModal({ onClose }: { onClose: () => void }) {
   const { selectedDate, setSelectedEventId, setIsEditEventModalOpen } = useUI();
@@ -22,13 +24,8 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
     setIsAnimatingIn(true);
   }, []);
 
-  // To ensure we await the fade-out animation before we hide the modal
-  function onCloseWrapper() {
-    setIsAnimatingIn(false);
-    setTimeout(() => {
-      onClose();
-    }, 300);
-  }
+  // Enable ESC key to close the modal (accessability)
+  useEscapeKey(() => awaitAnimationBeforeClosing(setIsAnimatingIn, onClose));
 
   const handleEditEvent = (id: string) => {
     setSelectedEventId(id);
@@ -49,7 +46,12 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
           <span className="text-modal-date-header text-2xl">
             {convertDateForModal(selectedDate)}
           </span>
-          <button onClick={onCloseWrapper} className="text-3xl">
+          <button
+            onClick={() =>
+              awaitAnimationBeforeClosing(setIsAnimatingIn, onClose)
+            }
+            className="text-3xl"
+          >
             &#215;
           </button>
         </div>

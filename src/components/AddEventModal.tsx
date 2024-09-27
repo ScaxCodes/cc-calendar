@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useEvents, EventForm } from "../contexts/EventContext";
 import { useUI } from "../contexts/UIContext";
 import { convertDateForModal } from "../utils/convertDateForModal";
+import { useEscapeKey } from "../hooks/useEscapeKey";
+import { awaitAnimationBeforeClosing } from "../utils/awaitAnimationBeforeClosing";
 
 export function AddEventModal({ onClose }: { onClose: () => void }) {
   const { addEvent } = useEvents();
@@ -26,6 +28,9 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
     setIsAnimatingIn(true);
   }, []);
 
+  // Enable ESC key to close the modal (accessability)
+  useEscapeKey(() => awaitAnimationBeforeClosing(setIsAnimatingIn, onClose));
+
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,16 +45,8 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
     };
 
     addEvent(selectedDate, newEvent);
-    onClose();
+    awaitAnimationBeforeClosing(setIsAnimatingIn, onClose);
   };
-
-  // To ensure we await the fade-out animation before we hide the modal
-  function onCloseWrapper() {
-    setIsAnimatingIn(false);
-    setTimeout(() => {
-      onClose();
-    }, 300);
-  }
 
   // For form validation only
   const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +68,12 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
           <span className="text-modal-date-header text-2xl">
             {convertDateForModal(selectedDate)}
           </span>
-          <button onClick={onCloseWrapper} className="text-3xl">
+          <button
+            onClick={() =>
+              awaitAnimationBeforeClosing(setIsAnimatingIn, onClose)
+            }
+            className="text-3xl"
+          >
             &#215;
           </button>
         </div>
@@ -86,6 +88,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
               ref={nameRef}
               className="w-full rounded border p-2"
               required
+              autoFocus
             />
           </div>
 

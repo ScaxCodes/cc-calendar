@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useEvents, EventForm } from "../contexts/EventContext";
 import { useUI } from "../contexts/UIContext";
 import { convertDateForModal } from "../utils/convertDateForModal";
+import { useEscapeKey } from "../hooks/useEscapeKey";
+import { awaitAnimationBeforeClosing } from "../utils/awaitAnimationBeforeClosing";
 
 export function EditEventModal({ onClose }: { onClose: () => void }) {
   const { events, editEvent, deleteEvent } = useEvents();
@@ -49,6 +51,9 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
     setIsAnimatingIn(true);
   }, []);
 
+  // Enable ESC key to close the modal (accessability)
+  useEscapeKey(() => awaitAnimationBeforeClosing(setIsAnimatingIn, onClose));
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -62,7 +67,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
     };
 
     editEvent(selectedDate, editedEvent);
-    onCloseWrapper();
+    awaitAnimationBeforeClosing(setIsAnimatingIn, onClose);
   };
 
   // For form validation only
@@ -71,16 +76,8 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
   };
 
   function handleDelete() {
-    onCloseWrapper();
+    awaitAnimationBeforeClosing(setIsAnimatingIn, onClose);
     deleteEvent(selectedDate, selectedEventId);
-  }
-
-  // To ensure we await the fade-out animation before we hide the modal
-  function onCloseWrapper() {
-    setIsAnimatingIn(false);
-    setTimeout(() => {
-      onClose();
-    }, 300);
   }
 
   return (
@@ -98,7 +95,13 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
           <span className="text-modal-date-header">
             {convertDateForModal(selectedDate)}
           </span>
-          <button onClick={onCloseWrapper}>X</button>
+          <button
+            onClick={() =>
+              awaitAnimationBeforeClosing(setIsAnimatingIn, onClose)
+            }
+          >
+            X
+          </button>
         </div>
         <form onSubmit={handleSubmit}>
           {/* Event Name */}
