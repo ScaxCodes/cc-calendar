@@ -23,6 +23,7 @@ export default function MoreEventsButton({
 
   const eventsAreHidden = eventsForDay.length - renderLimit > 0;
 
+  // Only render buttons if there are events to hide
   if (eventsAreHidden) {
     renderLimit = isHeaderCell
       ? amountEventsToRenderIfButtonVisibleForHeader

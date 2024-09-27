@@ -19,7 +19,7 @@ export function Calendar() {
     setIsEditEventModalOpen,
     isMoreEventsModalOpen,
     setIsMoreEventsModalOpen,
-  } = useUI(); // Get these from context
+  } = useUI();
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
 

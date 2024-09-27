@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useEvents, EventForm } from "../contexts/EventContext";
-import { convertDateForModal } from "../utils/convertDateForModal";
 import { useUI } from "../contexts/UIContext";
+import { convertDateForModal } from "../utils/convertDateForModal";
 
 export function AddEventModal({ onClose }: { onClose: () => void }) {
   const { addEvent } = useEvents();
@@ -32,19 +32,18 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
 
     const newEvent: EventForm = {
       id: Date.now().toString(),
-      name: nameRef.current?.value || "", // Getting value from ref
+      name: nameRef.current?.value || "",
       allDay,
       startTime: allDay ? "" : startTimeRef.current?.value || "",
       endTime: allDay ? "" : endTimeRef.current?.value || "",
       color: selectedColor,
     };
 
-    // Add event via context method
     addEvent(selectedDate, newEvent);
-    onClose(); // Close modal after adding the event
+    onClose();
   };
 
-  // To ensure we have a smooth transition before closing the modal
+  // To ensure we await the fade-out animation before we hide the modal
   function onCloseWrapper() {
     setIsAnimatingIn(false);
     setTimeout(() => {
@@ -52,6 +51,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
     }, 300);
   }
 
+  // For form validation only
   const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStartTime(e.target.value);
   };
@@ -71,7 +71,6 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
           <span className="text-modal-date-header text-2xl">
             {convertDateForModal(selectedDate)}
           </span>
-          {/* <button onClick={onClose} className="text-3xl"> */}
           <button onClick={onCloseWrapper} className="text-3xl">
             &#215;
           </button>
@@ -84,7 +83,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
             </label>
             <input
               type="text"
-              ref={nameRef} // Using ref instead of state
+              ref={nameRef}
               className="w-full rounded border p-2"
               required
             />
@@ -95,7 +94,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
             <input
               type="checkbox"
               checked={allDay}
-              onChange={() => setAllDay((prev) => !prev)} // Still using state for allDay
+              onChange={() => setAllDay((prev) => !prev)}
             />
             <label className="text-modal-form-label ml-2 text-sm font-medium">
               All Day?
@@ -110,11 +109,11 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
               </label>
               <input
                 type="time"
-                ref={startTimeRef} // Using ref instead of state
+                ref={startTimeRef}
                 className="w-full rounded border p-2"
-                disabled={allDay} // Disable if allDay is true
+                disabled={allDay} // Disabled if allDay is true
                 required={!allDay}
-                onChange={handleStartTimeChange} // For form validation only
+                onChange={handleStartTimeChange}
               />
             </div>
             <div className="w-full">
@@ -123,9 +122,9 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
               </label>
               <input
                 type="time"
-                ref={endTimeRef} // Using ref instead of state
+                ref={endTimeRef}
                 className="w-full rounded border p-2"
-                disabled={allDay} // Disable if allDay is true
+                disabled={allDay} // Disabled if allDay is true
                 required={!allDay}
                 min={startTime || ""}
               />

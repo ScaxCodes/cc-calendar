@@ -9,7 +9,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
   if (selectedDate === null)
     throw new Error("No valid date string available for modal functionality!");
 
-  // Default values needed for fade-out-modal after deletion of an event
+  // Default value [] needed for empty fade-out-modal after deletion of an event
   const [selectedEvent] =
     events[selectedDate]?.filter((event) => event.id === selectedEventId) || [];
 
@@ -19,7 +19,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
   const endTimeRef = useRef<HTMLInputElement>(null);
 
   // State for fields that require reactivity
-  // Default values needed for fade-out-modal after deletion of an event
+  // Default values needed for empty fade-out-modal after deletion of an event
   const [allDay, setAllDay] = useState(selectedEvent?.allDay ?? false);
   const [selectedColor, setSelectedColor] = useState(
     selectedEvent?.color ?? "red",
@@ -27,7 +27,8 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
   // Additional state to track start time for form validation
   const [startTime, setStartTime] = useState(selectedEvent?.startTime ?? "");
 
-  // Default values needed for fade-out-modal after deletion of an event
+  // Populate form with event data to edit
+  // Default values needed for empty fade-out-modal after deletion of an event
   useEffect(() => {
     if (nameRef.current) {
       nameRef.current.value = selectedEvent?.name ?? "";
@@ -53,18 +54,18 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
 
     const editedEvent: EventForm = {
       id: selectedEvent.id,
-      name: nameRef.current?.value || "", // Getting value from ref
+      name: nameRef.current?.value || "",
       allDay,
       startTime: allDay ? "" : startTimeRef.current?.value || "",
       endTime: allDay ? "" : endTimeRef.current?.value || "",
       color: selectedColor,
     };
 
-    // Edit event via context method
     editEvent(selectedDate, editedEvent);
-    onCloseWrapper(); // Close modal after submission
+    onCloseWrapper();
   };
 
+  // For form validation only
   const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStartTime(e.target.value);
   };
@@ -74,7 +75,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
     deleteEvent(selectedDate, selectedEventId);
   }
 
-  // To ensure we have a smooth transition before closing the modal
+  // To ensure we await the fade-out animation before we hide the modal
   function onCloseWrapper() {
     setIsAnimatingIn(false);
     setTimeout(() => {
@@ -107,7 +108,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
             </label>
             <input
               type="text"
-              ref={nameRef} // Using ref instead of state
+              ref={nameRef}
               className="w-full rounded border p-2"
               required
             />
@@ -133,11 +134,11 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
               </label>
               <input
                 type="time"
-                ref={startTimeRef} // Using ref instead of state
+                ref={startTimeRef}
                 className="w-full rounded border p-2"
                 disabled={allDay}
                 required={!allDay}
-                onChange={handleStartTimeChange} // For form validation only
+                onChange={handleStartTimeChange}
               />
             </div>
             {/* End Time */}
@@ -147,7 +148,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
               </label>
               <input
                 type="time"
-                ref={endTimeRef} // Using ref instead of state
+                ref={endTimeRef}
                 className="w-full rounded border p-2"
                 disabled={allDay}
                 required={!allDay}
