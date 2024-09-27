@@ -19,7 +19,8 @@ import { AddEventButton } from "./AddEventButton";
 import { DayName } from "./DayName";
 import { DayNumber } from "./DayNumber";
 
-// Constants for size-calculation of day-cell for dynamic "+X More" button
+// Constants for size-calculation of day-cell & dynamic "+X More" button
+const HEADER_HEIGHT = 16 + 34 + 16;
 const PADDING_CONTAINER = 8;
 const DAY_NAME_HEIGHT = 16;
 const DAY_NUMBER_HEIGHT = 24;
@@ -127,7 +128,7 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
   }
 
   return (
-    <main className="flex flex-1 flex-col p-4">
+    <main className="flex flex-1 flex-col">
       <div className="grid flex-1 auto-rows-fr grid-cols-7">
         {days.map((day, index) => {
           const isCurrentMonth = isSameMonth(day, currentMonth);
@@ -148,8 +149,10 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
             <div
               ref={(el) => (dayDivRefs.current[index] = el)} // Assign a unique ref for each day-cell
               key={index}
-              className={`group relative flex flex-col items-center border p-1 text-center ${backgroundClass} ${opacityClass} overflow-hidden`}
-              style={{ height: `calc((100vh - 98px) / ${weeks})` }}
+              className={`group relative flex flex-col items-center border p-1 text-center ${backgroundClass} ${opacityClass} min-h-[100px] overflow-hidden`}
+              style={{
+                height: `calc((100vh - ${HEADER_HEIGHT}px) / ${weeks})`,
+              }}
               data-date={dayISO}
             >
               <DayName index={index} day={day} />
