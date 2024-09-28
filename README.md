@@ -1,5 +1,5 @@
-<div style="text-align: center;">
-  <img src="screenshot.png" alt="Screenshot Description" style="width: 75%;">
+<div style="display: flex; align-items: center; justify-content: center;" align="center">
+  <img src="screenshot.png" alt="Screenshot of the monthly calendar view" style="width: 75%;">
 </div>
 
 # CC Calendar
