@@ -22,8 +22,9 @@ import { DayNumber } from "./DayNumber";
 // Constants for size-calculation of day-cell & dynamic "+X More" button
 const HEADER_HEIGHT = 16 + 34 + 16;
 const PADDING_CONTAINER = 8;
+const BORDER_CONTAINER = 2;
 const DAY_NAME_HEIGHT = 16;
-const DAY_NUMBER_HEIGHT = 24;
+const DAY_NUMBER_HEIGHT = 24 + 4;
 const EVENT_HEIGHT = 32;
 const MORE_BUTTON_HEIGHT = 16;
 
@@ -69,7 +70,7 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
     const height = dayDivRefs.current[0]?.clientHeight;
 
     const availableSpaceForEvents =
-      height - PADDING_CONTAINER - DAY_NUMBER_HEIGHT;
+      height - BORDER_CONTAINER - PADDING_CONTAINER - DAY_NUMBER_HEIGHT;
 
     SetAmountEventsToRender(Math.floor(availableSpaceForEvents / EVENT_HEIGHT));
     SetAmountEventsToRenderForHeader(
