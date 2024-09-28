@@ -54,7 +54,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
   // Enable ESC key to close the modal (accessability)
   useEscapeKey(() => awaitAnimationBeforeClosing(setIsAnimatingIn, onClose));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     const editedEvent: EventForm = {
@@ -68,12 +68,11 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
 
     editEvent(selectedDate, editedEvent);
     awaitAnimationBeforeClosing(setIsAnimatingIn, onClose);
-  };
+  }
 
   // For form validation only
-  const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setStartTime(e.target.value);
-  };
 
   function handleDelete() {
     awaitAnimationBeforeClosing(setIsAnimatingIn, onClose);

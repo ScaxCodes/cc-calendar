@@ -32,7 +32,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
   useEscapeKey(() => awaitAnimationBeforeClosing(setIsAnimatingIn, onClose));
 
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     const newEvent: EventForm = {
@@ -46,12 +46,11 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
 
     addEvent(selectedDate, newEvent);
     awaitAnimationBeforeClosing(setIsAnimatingIn, onClose);
-  };
+  }
 
   // For form validation only
-  const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setStartTime(e.target.value);
-  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center">

@@ -27,10 +27,10 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
   // Enable ESC key to close the modal (accessability)
   useEscapeKey(() => awaitAnimationBeforeClosing(setIsAnimatingIn, onClose));
 
-  const handleEditEvent = (id: string) => {
+  function handleEditEvent(id: string) {
     setSelectedEventId(id);
     setIsEditEventModalOpen(true);
-  };
+  }
 
   return (
     <div className="fixed inset-0 z-0 flex items-center justify-center">
