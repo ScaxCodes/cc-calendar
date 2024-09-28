@@ -88,6 +88,7 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
   }
 
   // Check on mount, on events change, and on window resize
+  // Used useLayoutEffect to avoid flashing events or buttons
   useLayoutEffect(() => {
     calculateFittingEvents();
 
