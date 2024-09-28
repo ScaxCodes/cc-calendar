@@ -1,50 +1,51 @@
-# React + TypeScript + Vite
+<div style="text-align: center;">
+  <img src="screenshot.png" alt="Screenshot Description" style="width: 75%;">
+</div>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# CC Calendar
 
-Currently, two official plugins are available:
+A customizable calendar application that allows users to view and manage events in a monthly grid. This project is built with React, using modern hooks and context for state management.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- Add, edit, and delete events
+- Responsive monthly calendar view
+- Event modals with animations
+- Customizable event colors
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Requirements
 
-- Configure the top-level `parserOptions` property like this:
+- Node.js (version 14.x or higher)
+- npm (version 6.x or higher)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Installation
+
+1. **Clone the repository:**
+
+```bash
+ git clone https://github.com/ScaxCodes/cc-calendar.git
+ cd cc-calendar
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. **Install dependencies:**
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm install
 ```
+
+## Running the Development Server
+
+To start the development server, run:
+
+```bash
+npm start
+```
+
+Your application should now be running at http://localhost:3000.
+
+## Running on CodeSandbox
+
+Alternatively, you can run the project on CodeSandbox:
+
+1. Open the repository in CodeSandbox by navigating to https://codesandbox.io/s/github/ScaxCodes/cc-calendar.
+2. The environment will automatically install dependencies and start the application.
