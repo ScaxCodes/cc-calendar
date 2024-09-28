@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import {
   format,
   startOfMonth,
@@ -88,7 +88,7 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
   }
 
   // Check on mount, on events change, and on window resize
-  useEffect(() => {
+  useLayoutEffect(() => {
     calculateFittingEvents();
 
     window.addEventListener("resize", calculateFittingEvents);
