@@ -113,6 +113,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
               ref={nameRef}
               className="w-full rounded border p-2"
               required
+              autoFocus
             />
           </div>
 
