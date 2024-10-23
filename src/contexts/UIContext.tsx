@@ -9,17 +9,17 @@ type UIContextType = {
   isMoreEventsModalOpen: boolean;
   setIsMoreEventsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   amountEventsToRender: number;
-  SetAmountEventsToRender: React.Dispatch<React.SetStateAction<number>>;
+  setAmountEventsToRender: React.Dispatch<React.SetStateAction<number>>;
   amountEventsToRenderForHeader: number;
-  SetAmountEventsToRenderForHeader: React.Dispatch<
+  setAmountEventsToRenderForHeader: React.Dispatch<
     React.SetStateAction<number>
   >;
   amountEventsToRenderIfButtonVisible: number;
-  SetAmountEventsToRenderIfButtonVisible: React.Dispatch<
+  setAmountEventsToRenderIfButtonVisible: React.Dispatch<
     React.SetStateAction<number>
   >;
   amountEventsToRenderIfButtonVisibleForHeader: number;
-  SetAmountEventsToRenderIfButtonVisibleForHeader: React.Dispatch<
+  setAmountEventsToRenderIfButtonVisibleForHeader: React.Dispatch<
     React.SetStateAction<number>
   >;
 };
@@ -31,16 +31,16 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedEventId, setSelectedEventId] = useState<string>("");
   const [isMoreEventsModalOpen, setIsMoreEventsModalOpen] = useState(false);
-  const [amountEventsToRender, SetAmountEventsToRender] = useState<number>(0);
-  const [amountEventsToRenderForHeader, SetAmountEventsToRenderForHeader] =
+  const [amountEventsToRender, setAmountEventsToRender] = useState<number>(0);
+  const [amountEventsToRenderForHeader, setAmountEventsToRenderForHeader] =
     useState<number>(0);
   const [
     amountEventsToRenderIfButtonVisible,
-    SetAmountEventsToRenderIfButtonVisible,
+    setAmountEventsToRenderIfButtonVisible,
   ] = useState<number>(0);
   const [
     amountEventsToRenderIfButtonVisibleForHeader,
-    SetAmountEventsToRenderIfButtonVisibleForHeader,
+    setAmountEventsToRenderIfButtonVisibleForHeader,
   ] = useState<number>(0);
 
   return (
@@ -53,13 +53,13 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
         isMoreEventsModalOpen,
         setIsMoreEventsModalOpen,
         amountEventsToRender,
-        SetAmountEventsToRender,
+        setAmountEventsToRender,
         amountEventsToRenderForHeader,
-        SetAmountEventsToRenderForHeader,
+        setAmountEventsToRenderForHeader,
         amountEventsToRenderIfButtonVisible,
-        SetAmountEventsToRenderIfButtonVisible,
+        setAmountEventsToRenderIfButtonVisible,
         amountEventsToRenderIfButtonVisibleForHeader,
-        SetAmountEventsToRenderIfButtonVisibleForHeader,
+        setAmountEventsToRenderIfButtonVisibleForHeader,
       }}
     >
       {children}

@@ -53,10 +53,10 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
     setSelectedDate,
     setSelectedEventId,
     setIsMoreEventsModalOpen,
-    SetAmountEventsToRender,
-    SetAmountEventsToRenderForHeader,
-    SetAmountEventsToRenderIfButtonVisible,
-    SetAmountEventsToRenderIfButtonVisibleForHeader,
+    setAmountEventsToRender,
+    setAmountEventsToRenderForHeader,
+    setAmountEventsToRenderIfButtonVisible,
+    setAmountEventsToRenderIfButtonVisibleForHeader,
   } = useUI();
   const { events } = useEvents();
 
@@ -70,14 +70,14 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
     const availableSpaceForEvents =
       height - BORDER_CONTAINER - PADDING_CONTAINER - DAY_NUMBER_HEIGHT;
 
-    SetAmountEventsToRender(Math.floor(availableSpaceForEvents / EVENT_HEIGHT));
-    SetAmountEventsToRenderForHeader(
+    setAmountEventsToRender(Math.floor(availableSpaceForEvents / EVENT_HEIGHT));
+    setAmountEventsToRenderForHeader(
       Math.floor((availableSpaceForEvents - DAY_NAME_HEIGHT) / EVENT_HEIGHT),
     );
-    SetAmountEventsToRenderIfButtonVisible(
+    setAmountEventsToRenderIfButtonVisible(
       Math.floor((availableSpaceForEvents - MORE_BUTTON_HEIGHT) / EVENT_HEIGHT),
     );
-    SetAmountEventsToRenderIfButtonVisibleForHeader(
+    setAmountEventsToRenderIfButtonVisibleForHeader(
       Math.floor(
         (availableSpaceForEvents - MORE_BUTTON_HEIGHT - DAY_NAME_HEIGHT) /
           EVENT_HEIGHT,
