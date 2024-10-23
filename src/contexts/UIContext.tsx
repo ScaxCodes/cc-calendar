@@ -2,14 +2,10 @@ import { createContext, useContext, useState } from "react";
 
 // Define types for the context
 type UIContextType = {
-  selectedDate: string | null;
-  setSelectedDate: React.Dispatch<React.SetStateAction<string | null>>;
-  selectedEventId: string | null;
-  setSelectedEventId: React.Dispatch<React.SetStateAction<string | null>>;
-  isAddEventModalOpen: boolean;
-  setIsAddEventModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  isEditEventModalOpen: boolean;
-  setIsEditEventModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedDate: string;
+  setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
+  selectedEventId: string;
+  setSelectedEventId: React.Dispatch<React.SetStateAction<string>>;
   isMoreEventsModalOpen: boolean;
   setIsMoreEventsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   amountEventsToRender: number;
@@ -32,10 +28,8 @@ type UIContextType = {
 const UIContext = createContext<UIContextType | undefined>(undefined);
 
 export function UIProvider({ children }: { children: React.ReactNode }) {
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-  const [isAddEventModalOpen, setIsAddEventModalOpen] = useState(false);
-  const [isEditEventModalOpen, setIsEditEventModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedEventId, setSelectedEventId] = useState<string>("");
   const [isMoreEventsModalOpen, setIsMoreEventsModalOpen] = useState(false);
   const [amountEventsToRender, SetAmountEventsToRender] = useState<number>(0);
   const [amountEventsToRenderForHeader, SetAmountEventsToRenderForHeader] =
@@ -56,10 +50,6 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
         setSelectedDate,
         selectedEventId,
         setSelectedEventId,
-        isAddEventModalOpen,
-        setIsAddEventModalOpen,
-        isEditEventModalOpen,
-        setIsEditEventModalOpen,
         isMoreEventsModalOpen,
         setIsMoreEventsModalOpen,
         amountEventsToRender,

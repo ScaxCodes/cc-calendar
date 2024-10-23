@@ -13,10 +13,6 @@ export function Calendar() {
     setSelectedDate,
     selectedEventId,
     setSelectedEventId,
-    isAddEventModalOpen,
-    setIsAddEventModalOpen,
-    isEditEventModalOpen,
-    setIsEditEventModalOpen,
     isMoreEventsModalOpen,
     setIsMoreEventsModalOpen,
   } = useUI();
@@ -24,34 +20,32 @@ export function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   function handleCloseAddEventModal() {
-    setSelectedDate(null);
-    setIsAddEventModalOpen(false);
+    setSelectedDate("");
   }
 
   function handleCloseEditEventModal() {
     // Handle edge-case when edit-modal is opened via more-events-modal
-    if (!isMoreEventsModalOpen) setSelectedDate(null);
-    setSelectedEventId(null);
-    setIsEditEventModalOpen(false);
+    if (!isMoreEventsModalOpen) setSelectedDate("");
+    setSelectedEventId("");
   }
 
   function handleCloseMoreEventsModal() {
-    setSelectedDate(null);
+    setSelectedDate("");
     setIsMoreEventsModalOpen(false);
   }
 
   return (
     <EventProvider>
-      <div className="text-default m-auto flex h-screen max-w-[1500px] flex-col">
+      <div className="m-auto flex h-screen max-w-[1500px] flex-col text-default">
         <Navigation
           currentMonth={currentMonth}
           setCurrentMonth={setCurrentMonth}
         />
         <Month currentMonth={currentMonth} />
-        {isAddEventModalOpen && selectedDate && (
+        {selectedDate && !selectedEventId && !isMoreEventsModalOpen && (
           <AddEventModal onClose={handleCloseAddEventModal} />
         )}
-        {isEditEventModalOpen && selectedDate && selectedEventId && (
+        {selectedEventId && (
           <EditEventModal onClose={handleCloseEditEventModal} />
         )}
         {isMoreEventsModalOpen && selectedDate && (

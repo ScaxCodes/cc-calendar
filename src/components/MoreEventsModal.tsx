@@ -7,12 +7,9 @@ import { useEscapeKey } from "../hooks/useEscapeKey";
 import { awaitAnimationBeforeClosing } from "../utils/awaitAnimationBeforeClosing";
 
 export function MoreEventsModal({ onClose }: { onClose: () => void }) {
-  const { selectedDate, setSelectedEventId, setIsEditEventModalOpen } = useUI();
+  const { selectedDate, setSelectedEventId } = useUI();
   const { events } = useEvents();
 
-  if (selectedDate === null) {
-    throw new Error("Could not get a valid date for selecting events");
-  }
   const eventsForDay = events[selectedDate];
   const eventsForDaySorted = sortEvents(eventsForDay);
 
@@ -29,7 +26,6 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
 
   function handleEditEvent(id: string) {
     setSelectedEventId(id);
-    setIsEditEventModalOpen(true);
   }
 
   return (
@@ -43,7 +39,7 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
         }`}
       >
         <div className="mb-4 flex items-center justify-between">
-          <span className="text-modal-date-header text-2xl">
+          <span className="text-2xl text-modal-date-header">
             {convertDateForModal(selectedDate)}
           </span>
           <button
@@ -75,7 +71,7 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
                       <div
                         className={`bg-custom-${singleEvent.color} mr-3 h-3 w-3 shrink-0 rounded-full`}
                       />
-                      <div className="text-timed-event mr-1">
+                      <div className="mr-1 text-timed-event">
                         {singleEvent.startTime}
                       </div>
                       <div>{singleEvent.name}</div>

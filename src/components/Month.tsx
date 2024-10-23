@@ -51,9 +51,7 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
 
   const {
     setSelectedDate,
-    setIsAddEventModalOpen,
     setSelectedEventId,
-    setIsEditEventModalOpen,
     setIsMoreEventsModalOpen,
     SetAmountEventsToRender,
     SetAmountEventsToRenderForHeader,
@@ -103,7 +101,6 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
     const date = event.currentTarget.parentElement?.getAttribute("data-date");
     if (date) {
       setSelectedDate(date);
-      setIsAddEventModalOpen(true);
     }
   }
 
@@ -115,7 +112,6 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
     if (date) {
       setSelectedDate(date);
       setSelectedEventId(id);
-      setIsEditEventModalOpen(true);
     }
   }
 
