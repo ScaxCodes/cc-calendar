@@ -48,7 +48,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
       color: selectedColor,
     };
 
-    addEvent(selectedDate, newEvent);
+    if (selectedDate !== null) addEvent(selectedDate, newEvent);
     awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose);
   }
 

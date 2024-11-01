@@ -22,17 +22,17 @@ export function Calendar() {
   const { headerHeight, headerRef } = useHeaderHeight(); // Use the custom hook
 
   function handleCloseAddEventModal() {
-    setSelectedDate("");
+    setSelectedDate(null);
   }
 
   function handleCloseEditEventModal() {
     // Handle edge-case when edit-modal is opened via more-events-modal
-    if (!isMoreEventsModalOpen) setSelectedDate("");
-    setSelectedEventId("");
+    if (!isMoreEventsModalOpen) setSelectedDate(null);
+    setSelectedEventId(null);
   }
 
   function handleCloseMoreEventsModal() {
-    setSelectedDate("");
+    setSelectedDate(null);
     setIsMoreEventsModalOpen(false);
   }
 

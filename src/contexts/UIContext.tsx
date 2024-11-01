@@ -2,10 +2,10 @@ import { createContext, useContext, useState } from "react";
 
 // Define types for the context
 type UIContextType = {
-  selectedDate: string;
-  setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
-  selectedEventId: string;
-  setSelectedEventId: React.Dispatch<React.SetStateAction<string>>;
+  selectedDate: string | null;
+  setSelectedDate: React.Dispatch<React.SetStateAction<string | null>>;
+  selectedEventId: string | null;
+  setSelectedEventId: React.Dispatch<React.SetStateAction<string | null>>;
   isMoreEventsModalOpen: boolean;
   setIsMoreEventsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   amountEventsToRender: number;
@@ -28,8 +28,8 @@ type UIContextType = {
 const UIContext = createContext<UIContextType | undefined>(undefined);
 
 export function UIProvider({ children }: { children: React.ReactNode }) {
-  const [selectedDate, setSelectedDate] = useState<string>("");
-  const [selectedEventId, setSelectedEventId] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [isMoreEventsModalOpen, setIsMoreEventsModalOpen] = useState(false);
   const [amountEventsToRender, setAmountEventsToRender] = useState<number>(0);
   const [amountEventsToRenderForHeader, setAmountEventsToRenderForHeader] =

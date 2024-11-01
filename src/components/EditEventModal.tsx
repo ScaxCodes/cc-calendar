@@ -9,6 +9,8 @@ import FocusTrap from "focus-trap-react";
 export function EditEventModal({ onClose }: { onClose: () => void }) {
   const { events, editEvent, deleteEvent } = useEvents();
   const { selectedDate, selectedEventId } = useUI();
+  if (selectedDate === null) return;
+
   // Default value [] needed for empty fade-out-modal after deletion of an event
   const [selectedEvent] =
     events[selectedDate]?.filter((event) => event.id === selectedEventId) || [];
@@ -67,7 +69,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
       color: selectedColor,
     };
 
-    editEvent(selectedDate, editedEvent);
+    if (selectedDate !== null) editEvent(selectedDate, editedEvent);
     awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose);
   }
 
@@ -77,7 +79,8 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
 
   function handleDelete() {
     awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose);
-    deleteEvent(selectedDate, selectedEventId);
+    if (selectedDate !== null && selectedEventId !== null)
+      deleteEvent(selectedDate, selectedEventId);
   }
 
   return (

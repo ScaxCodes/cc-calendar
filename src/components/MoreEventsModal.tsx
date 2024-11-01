@@ -9,6 +9,7 @@ import { awaitAnimationBeforeClosing } from "../utils/awaitAnimationBeforeClosin
 export function MoreEventsModal({ onClose }: { onClose: () => void }) {
   const { selectedDate, setSelectedEventId } = useUI();
   const { events } = useEvents();
+  if (selectedDate === null) return;
 
   const eventsForDay = events[selectedDate];
   const eventsForDaySorted = sortEvents(eventsForDay);
