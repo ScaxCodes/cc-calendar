@@ -84,7 +84,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <FocusTrap>
+    <FocusTrap focusTrapOptions={{ initialFocus: () => nameRef.current }}>
       <div className="fixed inset-0 z-10 flex items-center justify-center">
         <div
           ref={modalRef}
@@ -124,7 +124,6 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
                 ref={nameRef}
                 className="w-full rounded border p-2"
                 required
-                autoFocus
               />
             </div>
 
