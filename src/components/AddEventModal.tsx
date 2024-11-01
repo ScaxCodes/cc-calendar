@@ -20,7 +20,8 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
   // Additional state to track start time for form validation
   const [startTime, setStartTime] = useState<string | null>(null);
 
-  // New state to control animation
+  // New state and ref to control animation
+  const modalRef = useRef<HTMLDivElement>(null);
   const [isAnimatingIn, setIsAnimatingIn] = useState(false);
 
   // Trigger animation after mounting the component
@@ -29,7 +30,9 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
   }, []);
 
   // Enable ESC key to close the modal (accessability)
-  useEscapeKey(() => awaitAnimationBeforeClosing(setIsAnimatingIn, onClose));
+  useEscapeKey(() =>
+    awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose),
+  );
 
   // Handle form submission
   function handleSubmit(e: React.FormEvent) {
@@ -45,7 +48,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
     };
 
     addEvent(selectedDate, newEvent);
-    awaitAnimationBeforeClosing(setIsAnimatingIn, onClose);
+    awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose);
   }
 
   // For form validation only
@@ -55,6 +58,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center">
       <div
+        ref={modalRef}
         className={`fixed inset-0 bg-black transition-opacity duration-300 ${isAnimatingIn ? "opacity-50" : "opacity-0"}`}
       ></div>
       <div
@@ -64,12 +68,12 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
       >
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-3xl">Add Event</h2>
-          <span className="text-modal-date-header text-2xl">
+          <span className="text-2xl text-modal-date-header">
             {convertDateForModal(selectedDate)}
           </span>
           <button
             onClick={() =>
-              awaitAnimationBeforeClosing(setIsAnimatingIn, onClose)
+              awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose)
             }
             className="text-3xl"
           >
@@ -79,7 +83,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
         <form onSubmit={handleSubmit}>
           {/* Event Name */}
           <div className="mb-4">
-            <label className="text-modal-form-label text-sm font-medium">
+            <label className="text-sm font-medium text-modal-form-label">
               Name
             </label>
             <input
@@ -98,7 +102,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
               checked={allDay}
               onChange={() => setAllDay((prev) => !prev)}
             />
-            <label className="text-modal-form-label ml-2 text-sm font-medium">
+            <label className="ml-2 text-sm font-medium text-modal-form-label">
               All Day?
             </label>
           </div>
@@ -106,7 +110,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
           {/* Start Time and End Time */}
           <div className="mb-4 flex justify-between gap-2">
             <div className="w-full">
-              <label className="text-modal-form-label block text-sm font-medium">
+              <label className="block text-sm font-medium text-modal-form-label">
                 Start Time
               </label>
               <input
@@ -119,7 +123,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
               />
             </div>
             <div className="w-full">
-              <label className="text-modal-form-label block text-sm font-medium">
+              <label className="block text-sm font-medium text-modal-form-label">
                 End Time
               </label>
               <input
@@ -135,7 +139,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
 
           {/* Color Selection */}
           <div className="mb-4">
-            <label className="text-modal-form-label text-sm font-medium">
+            <label className="text-sm font-medium text-modal-form-label">
               Color
             </label>
             <div className="flex items-center gap-4">
@@ -161,7 +165,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
           {/* Submit Button */}
           <button
             type="submit"
-            className="bg-add-button-bg text-add-button-text hover:bg-add-button-bg-hover border-add-button-border w-full rounded border py-2"
+            className="w-full rounded border border-add-button-border bg-add-button-bg py-2 text-add-button-text hover:bg-add-button-bg-hover"
           >
             Add
           </button>

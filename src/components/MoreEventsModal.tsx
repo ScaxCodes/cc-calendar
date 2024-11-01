@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useEvents } from "../contexts/EventContext";
 import { useUI } from "../contexts/UIContext";
 import { convertDateForModal } from "../utils/convertDateForModal";
@@ -13,7 +13,8 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
   const eventsForDay = events[selectedDate];
   const eventsForDaySorted = sortEvents(eventsForDay);
 
-  // New state to control animation
+  // New state and ref to control animation
+  const modalRef = useRef<HTMLDivElement>(null);
   const [isAnimatingIn, setIsAnimatingIn] = useState(false);
 
   // Trigger animation after mounting the component
@@ -22,7 +23,9 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
   }, []);
 
   // Enable ESC key to close the modal (accessability)
-  useEscapeKey(() => awaitAnimationBeforeClosing(setIsAnimatingIn, onClose));
+  useEscapeKey(() =>
+    awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose),
+  );
 
   function handleEditEvent(id: string) {
     setSelectedEventId(id);
@@ -31,6 +34,7 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-0 flex items-center justify-center">
       <div
+        ref={modalRef}
         className={`fixed inset-0 bg-black transition-opacity duration-300 ${isAnimatingIn ? "opacity-50" : "opacity-0"}`}
       ></div>
       <div
@@ -44,7 +48,7 @@ export function MoreEventsModal({ onClose }: { onClose: () => void }) {
           </span>
           <button
             onClick={() =>
-              awaitAnimationBeforeClosing(setIsAnimatingIn, onClose)
+              awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose)
             }
             className="text-3xl"
           >

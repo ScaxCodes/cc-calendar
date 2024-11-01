@@ -8,9 +8,6 @@ import { awaitAnimationBeforeClosing } from "../utils/awaitAnimationBeforeClosin
 export function EditEventModal({ onClose }: { onClose: () => void }) {
   const { events, editEvent, deleteEvent } = useEvents();
   const { selectedDate, selectedEventId } = useUI();
-  if (selectedDate === null)
-    throw new Error("No valid date string available for modal functionality!");
-
   // Default value [] needed for empty fade-out-modal after deletion of an event
   const [selectedEvent] =
     events[selectedDate]?.filter((event) => event.id === selectedEventId) || [];
@@ -43,7 +40,8 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
     }
   }, [selectedEvent]);
 
-  // New state to control animation
+  // New state and ref to control animation
+  const modalRef = useRef<HTMLDivElement>(null);
   const [isAnimatingIn, setIsAnimatingIn] = useState(false);
 
   // Trigger animation after mounting the component
@@ -52,7 +50,9 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
   }, []);
 
   // Enable ESC key to close the modal (accessability)
-  useEscapeKey(() => awaitAnimationBeforeClosing(setIsAnimatingIn, onClose));
+  useEscapeKey(() =>
+    awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose),
+  );
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -67,7 +67,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
     };
 
     editEvent(selectedDate, editedEvent);
-    awaitAnimationBeforeClosing(setIsAnimatingIn, onClose);
+    awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose);
   }
 
   // For form validation only
@@ -75,13 +75,14 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
     setStartTime(e.target.value);
 
   function handleDelete() {
-    awaitAnimationBeforeClosing(setIsAnimatingIn, onClose);
+    awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose);
     deleteEvent(selectedDate, selectedEventId);
   }
 
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center">
       <div
+        ref={modalRef}
         className={`fixed inset-0 bg-black transition-opacity duration-300 ${isAnimatingIn ? "opacity-50" : "opacity-0"}`}
       ></div>
       <div
@@ -96,7 +97,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
           </span>
           <button
             onClick={() =>
-              awaitAnimationBeforeClosing(setIsAnimatingIn, onClose)
+              awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose)
             }
           >
             X
@@ -105,7 +106,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
         <form onSubmit={handleSubmit}>
           {/* Event Name */}
           <div className="mb-4">
-            <label className="text-modal-form-label text-sm font-medium">
+            <label className="text-sm font-medium text-modal-form-label">
               Name
             </label>
             <input
@@ -124,7 +125,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
               checked={allDay}
               onChange={() => setAllDay((prev) => !prev)}
             />
-            <label className="text-modal-form-label ml-2 text-sm font-medium">
+            <label className="ml-2 text-sm font-medium text-modal-form-label">
               All Day?
             </label>
           </div>
@@ -132,7 +133,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
           {/* Start Time */}
           <div className="mb-4 flex justify-between gap-2">
             <div className="w-full">
-              <label className="text-modal-form-label block text-sm font-medium">
+              <label className="block text-sm font-medium text-modal-form-label">
                 Start Time
               </label>
               <input
@@ -146,7 +147,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
             </div>
             {/* End Time */}
             <div className="w-full">
-              <label className="text-modal-form-label block text-sm font-medium">
+              <label className="block text-sm font-medium text-modal-form-label">
                 End Time
               </label>
               <input
@@ -162,7 +163,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
 
           {/* Color */}
           <div className="mb-4">
-            <label className="text-modal-form-label text-sm font-medium">
+            <label className="text-sm font-medium text-modal-form-label">
               Color
             </label>
             <div className="flex items-center gap-4">
@@ -176,7 +177,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
                   className="hidden"
                 />
                 <span
-                  className={`bg-custom-red block h-8 w-8 rounded-sm ${
+                  className={`block h-8 w-8 rounded-sm bg-custom-red ${
                     selectedColor === "red" ? "opacity-100" : "opacity-50"
                   }`}
                 ></span>
@@ -191,7 +192,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
                   className="hidden"
                 />
                 <span
-                  className={`bg-custom-green block h-8 w-8 rounded-sm ${
+                  className={`block h-8 w-8 rounded-sm bg-custom-green ${
                     selectedColor === "green" ? "opacity-100" : "opacity-50"
                   }`}
                 ></span>
@@ -206,7 +207,7 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
                   className="hidden"
                 />
                 <span
-                  className={`bg-custom-blue block h-8 w-8 rounded-sm ${
+                  className={`block h-8 w-8 rounded-sm bg-custom-blue ${
                     selectedColor === "blue" ? "opacity-100" : "opacity-50"
                   }`}
                 ></span>
@@ -218,13 +219,13 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
           <div className="flex gap-2">
             <button
               type="submit"
-              className="border-add-button-border bg-add-button-bg text-add-button-text hover:bg-add-button-bg-hover w-full rounded border py-2"
+              className="w-full rounded border border-add-button-border bg-add-button-bg py-2 text-add-button-text hover:bg-add-button-bg-hover"
             >
               Edit
             </button>
             {/* Delete Button */}
             <button
-              className="border-delete-button-border bg-delete-button-bg text-delete-button-text hover:bg-delete-button-bg-hover w-full rounded border py-2"
+              className="w-full rounded border border-delete-button-border bg-delete-button-bg py-2 text-delete-button-text hover:bg-delete-button-bg-hover"
               type="button"
               onClick={handleDelete}
             >
