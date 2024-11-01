@@ -55,7 +55,7 @@ export default function Events({
                   <div
                     className={`bg-custom-${singleEvent.color} mr-3 h-3 w-3 shrink-0 rounded-full`}
                   />
-                  <div className="text-timed-event mr-1">
+                  <div className="mr-1 text-timed-event">
                     {singleEvent.startTime}
                   </div>
                   <div>{singleEvent.name}</div>

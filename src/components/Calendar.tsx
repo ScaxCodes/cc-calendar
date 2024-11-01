@@ -6,6 +6,7 @@ import { Month } from "./Month";
 import { AddEventModal } from "./AddEventModal";
 import { EditEventModal } from "./EditEventModal";
 import { MoreEventsModal } from "./MoreEventsModal";
+import { useHeaderHeight } from "../hooks/useHeaderHeight";
 
 export function Calendar() {
   const {
@@ -18,6 +19,7 @@ export function Calendar() {
   } = useUI();
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const { headerHeight, headerRef } = useHeaderHeight(); // Use the custom hook
 
   function handleCloseAddEventModal() {
     setSelectedDate("");
@@ -40,8 +42,9 @@ export function Calendar() {
         <Navigation
           currentMonth={currentMonth}
           setCurrentMonth={setCurrentMonth}
+          headerRef={headerRef}
         />
-        <Month currentMonth={currentMonth} />
+        <Month currentMonth={currentMonth} headerHeight={headerHeight} />
         {selectedDate && !selectedEventId && !isMoreEventsModalOpen && (
           <AddEventModal onClose={handleCloseAddEventModal} />
         )}

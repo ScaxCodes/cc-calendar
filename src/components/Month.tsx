@@ -20,7 +20,6 @@ import { DayName } from "./DayName";
 import { DayNumber } from "./DayNumber";
 
 // Constants for size-calculation of day-cell & dynamic "+X More" button
-const HEADER_HEIGHT = 16 + 34 + 16;
 const PADDING_CONTAINER = 8;
 const BORDER_CONTAINER = 2;
 const DAY_NAME_HEIGHT = 16;
@@ -28,7 +27,13 @@ const DAY_NUMBER_HEIGHT = 24 + 4;
 const EVENT_HEIGHT = 32;
 const MORE_BUTTON_HEIGHT = 16;
 
-export function Month({ currentMonth }: { currentMonth: Date }) {
+export function Month({
+  currentMonth,
+  headerHeight,
+}: {
+  currentMonth: Date;
+  headerHeight: number;
+}) {
   // Get days of the month
   const today = new Date();
   const startDate = startOfMonth(currentMonth);
@@ -95,7 +100,8 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
     return () => {
       window.removeEventListener("resize", calculateFittingEvents);
     };
-  }, [events]);
+  }); // No dependency array to trigger on every render (instead of adding [events])
+  // Without this change the initial render without manual resizing was buggy
 
   function handleAddEvent(event: React.MouseEvent<HTMLButtonElement>) {
     const date = event.currentTarget.parentElement?.getAttribute("data-date");
@@ -149,7 +155,7 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
               key={index}
               className={`group relative flex flex-col items-center border p-1 text-center ${backgroundClass} ${opacityClass} min-h-[100px] overflow-hidden`}
               style={{
-                height: `calc((100vh - ${HEADER_HEIGHT}px) / ${weeks})`,
+                height: `calc((100vh - ${headerHeight}px) / ${weeks})`,
               }}
               data-date={dayISO}
             >
