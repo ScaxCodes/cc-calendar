@@ -107,11 +107,15 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
         <form onSubmit={handleSubmit}>
           {/* Event Name */}
           <div className="mb-4">
-            <label className="text-sm font-medium text-modal-form-label">
+            <label
+              className="text-sm font-medium text-modal-form-label"
+              htmlFor="name"
+            >
               Name
             </label>
             <input
               type="text"
+              id="name"
               ref={nameRef}
               className="w-full rounded border p-2"
               required
@@ -123,10 +127,14 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
           <div className="mb-4 flex">
             <input
               type="checkbox"
+              id="all-day"
               checked={allDay}
               onChange={() => setAllDay((prev) => !prev)}
             />
-            <label className="ml-2 text-sm font-medium text-modal-form-label">
+            <label
+              className="ml-2 text-sm font-medium text-modal-form-label"
+              htmlFor="all-day"
+            >
               All Day?
             </label>
           </div>
@@ -134,11 +142,15 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
           {/* Start Time */}
           <div className="mb-4 flex justify-between gap-2">
             <div className="w-full">
-              <label className="block text-sm font-medium text-modal-form-label">
+              <label
+                className="block text-sm font-medium text-modal-form-label"
+                htmlFor="start-time"
+              >
                 Start Time
               </label>
               <input
                 type="time"
+                id="start-time"
                 ref={startTimeRef}
                 className="w-full rounded border p-2"
                 disabled={allDay}
@@ -148,11 +160,15 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
             </div>
             {/* End Time */}
             <div className="w-full">
-              <label className="block text-sm font-medium text-modal-form-label">
+              <label
+                className="block text-sm font-medium text-modal-form-label"
+                htmlFor="end-time"
+              >
                 End Time
               </label>
               <input
                 type="time"
+                id="end-time"
                 ref={endTimeRef}
                 className="w-full rounded border p-2"
                 disabled={allDay}
