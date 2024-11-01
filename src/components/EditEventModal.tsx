@@ -99,8 +99,9 @@ export function EditEventModal({ onClose }: { onClose: () => void }) {
             onClick={() =>
               awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose)
             }
+            className="flex h-8 w-8 items-center justify-center rounded-full text-3xl hover:bg-today-button-bg-hover"
           >
-            X
+            &#215;
           </button>
         </div>
         <form onSubmit={handleSubmit}>

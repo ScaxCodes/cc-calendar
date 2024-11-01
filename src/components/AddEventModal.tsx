@@ -75,7 +75,7 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
             onClick={() =>
               awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose)
             }
-            className="text-3xl"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-3xl hover:bg-today-button-bg-hover"
           >
             &#215;
           </button>
