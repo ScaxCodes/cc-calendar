@@ -6,6 +6,7 @@ import { Month } from "./Month";
 import { AddEventModal } from "./AddEventModal";
 import { EditEventModal } from "./EditEventModal";
 import { MoreEventsModal } from "./MoreEventsModal";
+import { useHeaderHeight } from "../hooks/useHeaderHeight";
 
 export function Calendar() {
   const {
@@ -13,26 +14,21 @@ export function Calendar() {
     setSelectedDate,
     selectedEventId,
     setSelectedEventId,
-    isAddEventModalOpen,
-    setIsAddEventModalOpen,
-    isEditEventModalOpen,
-    setIsEditEventModalOpen,
     isMoreEventsModalOpen,
     setIsMoreEventsModalOpen,
   } = useUI();
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const { headerHeight, headerRef } = useHeaderHeight(); 
 
   function handleCloseAddEventModal() {
     setSelectedDate(null);
-    setIsAddEventModalOpen(false);
   }
 
   function handleCloseEditEventModal() {
     // Handle edge-case when edit-modal is opened via more-events-modal
     if (!isMoreEventsModalOpen) setSelectedDate(null);
     setSelectedEventId(null);
-    setIsEditEventModalOpen(false);
   }
 
   function handleCloseMoreEventsModal() {
@@ -42,16 +38,17 @@ export function Calendar() {
 
   return (
     <EventProvider>
-      <div className="text-default m-auto flex h-screen max-w-[1500px] flex-col">
+      <div className="m-auto flex h-screen max-w-[1500px] flex-col text-default">
         <Navigation
           currentMonth={currentMonth}
           setCurrentMonth={setCurrentMonth}
+          headerRef={headerRef}
         />
-        <Month currentMonth={currentMonth} />
-        {isAddEventModalOpen && selectedDate && (
+        <Month currentMonth={currentMonth} headerHeight={headerHeight} />
+        {selectedDate && !selectedEventId && !isMoreEventsModalOpen && (
           <AddEventModal onClose={handleCloseAddEventModal} />
         )}
-        {isEditEventModalOpen && selectedDate && selectedEventId && (
+        {selectedEventId && (
           <EditEventModal onClose={handleCloseEditEventModal} />
         )}
         {isMoreEventsModalOpen && selectedDate && (

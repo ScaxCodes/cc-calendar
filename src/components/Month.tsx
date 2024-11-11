@@ -1,4 +1,3 @@
-import { useLayoutEffect, useRef } from "react";
 import {
   format,
   startOfMonth,
@@ -18,17 +17,17 @@ import MoreEventsButton from "./MoreEventsButton";
 import { AddEventButton } from "./AddEventButton";
 import { DayName } from "./DayName";
 import { DayNumber } from "./DayNumber";
+import { useEventRendering } from "../hooks/useEventRendering";
+import { useDayCellHeights } from "../hooks/useDayCellHeights";
 
-// Constants for size-calculation of day-cell & dynamic "+X More" button
-const HEADER_HEIGHT = 16 + 34 + 16;
-const PADDING_CONTAINER = 8;
-const BORDER_CONTAINER = 2;
-const DAY_NAME_HEIGHT = 16;
-const DAY_NUMBER_HEIGHT = 24 + 4;
-const EVENT_HEIGHT = 32;
-const MORE_BUTTON_HEIGHT = 16;
 
-export function Month({ currentMonth }: { currentMonth: Date }) {
+export function Month({
+  currentMonth,
+  headerHeight,
+}: {
+  currentMonth: Date;
+  headerHeight: number;
+}) {
   // Get days of the month
   const today = new Date();
   const startDate = startOfMonth(currentMonth);
@@ -51,59 +50,18 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
 
   const {
     setSelectedDate,
-    setIsAddEventModalOpen,
     setSelectedEventId,
-    setIsEditEventModalOpen,
     setIsMoreEventsModalOpen,
-    SetAmountEventsToRender,
-    SetAmountEventsToRenderForHeader,
-    SetAmountEventsToRenderIfButtonVisible,
-    SetAmountEventsToRenderIfButtonVisibleForHeader,
   } = useUI();
   const { events } = useEvents();
+  const { heights, refs } = useDayCellHeights();
 
-  // Create an array of refs for the day-cells
-  const dayDivRefs = useRef<Array<HTMLDivElement | null>>([]);
-
-  function calculateFittingEvents() {
-    if (dayDivRefs.current[0]?.clientHeight === undefined) return;
-    const height = dayDivRefs.current[0]?.clientHeight;
-
-    const availableSpaceForEvents =
-      height - BORDER_CONTAINER - PADDING_CONTAINER - DAY_NUMBER_HEIGHT;
-
-    SetAmountEventsToRender(Math.floor(availableSpaceForEvents / EVENT_HEIGHT));
-    SetAmountEventsToRenderForHeader(
-      Math.floor((availableSpaceForEvents - DAY_NAME_HEIGHT) / EVENT_HEIGHT),
-    );
-    SetAmountEventsToRenderIfButtonVisible(
-      Math.floor((availableSpaceForEvents - MORE_BUTTON_HEIGHT) / EVENT_HEIGHT),
-    );
-    SetAmountEventsToRenderIfButtonVisibleForHeader(
-      Math.floor(
-        (availableSpaceForEvents - MORE_BUTTON_HEIGHT - DAY_NAME_HEIGHT) /
-          EVENT_HEIGHT,
-      ),
-    );
-  }
-
-  // Check on mount, on events change, and on window resize
-  // Used useLayoutEffect to avoid flashing events or buttons
-  useLayoutEffect(() => {
-    calculateFittingEvents();
-
-    window.addEventListener("resize", calculateFittingEvents);
-
-    return () => {
-      window.removeEventListener("resize", calculateFittingEvents);
-    };
-  }, [events]);
+  const renderLimits = useEventRendering(refs.dayCell, heights);
 
   function handleAddEvent(event: React.MouseEvent<HTMLButtonElement>) {
     const date = event.currentTarget.parentElement?.getAttribute("data-date");
     if (date) {
       setSelectedDate(date);
-      setIsAddEventModalOpen(true);
     }
   }
 
@@ -115,7 +73,6 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
     if (date) {
       setSelectedDate(date);
       setSelectedEventId(id);
-      setIsEditEventModalOpen(true);
     }
   }
 
@@ -149,22 +106,24 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
 
           return (
             <div
-              ref={(el) => (dayDivRefs.current[index] = el)} // Assign a unique ref for each day-cell
+              ref={index === 0 ? refs.dayCell : null} // Only need to measure one cell
               key={index}
               className={`group relative flex flex-col items-center border p-1 text-center ${backgroundClass} ${opacityClass} min-h-[100px] overflow-hidden`}
               style={{
-                height: `calc((100vh - ${HEADER_HEIGHT}px) / ${weeks})`,
+                height: `calc((100vh - ${headerHeight}px) / ${weeks})`,
               }}
               data-date={dayISO}
             >
-              <DayName index={index} day={day} />
+              <DayName index={index} day={day} dayNameRef={refs.dayName} />
               <AddEventButton onClick={handleAddEvent} />
-              <DayNumber todayHighlightClass={todayHighlightClass} day={day} />
+              <DayNumber todayHighlightClass={todayHighlightClass} day={day} dayNumberRef={refs.dayNumber} />
               {eventsForDay && (
                 <Events
                   eventsForDay={eventsForDay}
                   isHeaderCell={index <= 6}
                   onClick={handleEditEvent}
+                  renderLimits={renderLimits}
+                  eventRef={refs.event}
                 />
               )}
               {/* Dynamic-growing-spacer between events and more-events-button */}
@@ -174,6 +133,8 @@ export function Month({ currentMonth }: { currentMonth: Date }) {
                   eventsForDay={eventsForDay}
                   isHeaderCell={index <= 6}
                   onClick={handleOpenMoreEventsModal}
+                  renderLimits={renderLimits}
+                  moreButtonRef={refs.moreButton}
                 />
               )}
             </div>

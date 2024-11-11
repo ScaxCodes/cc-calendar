@@ -4,6 +4,7 @@ import { useUI } from "../contexts/UIContext";
 import { convertDateForModal } from "../utils/convertDateForModal";
 import { useEscapeKey } from "../hooks/useEscapeKey";
 import { awaitAnimationBeforeClosing } from "../utils/awaitAnimationBeforeClosing";
+import FocusTrap from "focus-trap-react";
 
 export function AddEventModal({ onClose }: { onClose: () => void }) {
   const { addEvent } = useEvents();
@@ -20,7 +21,8 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
   // Additional state to track start time for form validation
   const [startTime, setStartTime] = useState<string | null>(null);
 
-  // New state to control animation
+  // New state and ref to control animation
+  const modalRef = useRef<HTMLDivElement>(null);
   const [isAnimatingIn, setIsAnimatingIn] = useState(false);
 
   // Trigger animation after mounting the component
@@ -29,7 +31,9 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
   }, []);
 
   // Enable ESC key to close the modal (accessability)
-  useEscapeKey(() => awaitAnimationBeforeClosing(setIsAnimatingIn, onClose));
+  useEscapeKey(() =>
+    awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose),
+  );
 
   // Handle form submission
   function handleSubmit(e: React.FormEvent) {
@@ -44,8 +48,8 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
       color: selectedColor,
     };
 
-    addEvent(selectedDate, newEvent);
-    awaitAnimationBeforeClosing(setIsAnimatingIn, onClose);
+    if (selectedDate !== null) addEvent(selectedDate, newEvent);
+    awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose);
   }
 
   // For form validation only
@@ -53,120 +57,144 @@ export function AddEventModal({ onClose }: { onClose: () => void }) {
     setStartTime(e.target.value);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center">
-      <div
-        className={`fixed inset-0 bg-black transition-opacity duration-300 ${isAnimatingIn ? "opacity-50" : "opacity-0"}`}
-      ></div>
-      <div
-        className={`w-96 transform rounded bg-white p-6 shadow-lg transition-transform duration-300 ${
-          isAnimatingIn ? "scale-100" : "scale-0"
-        }`}
-      >
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-3xl">Add Event</h2>
-          <span className="text-modal-date-header text-2xl">
-            {convertDateForModal(selectedDate)}
-          </span>
-          <button
-            onClick={() =>
-              awaitAnimationBeforeClosing(setIsAnimatingIn, onClose)
-            }
-            className="text-3xl"
-          >
-            &#215;
-          </button>
-        </div>
-        <form onSubmit={handleSubmit}>
-          {/* Event Name */}
-          <div className="mb-4">
-            <label className="text-modal-form-label text-sm font-medium">
-              Name
-            </label>
-            <input
-              type="text"
-              ref={nameRef}
-              className="w-full rounded border p-2"
-              required
-              autoFocus
-            />
+    <FocusTrap focusTrapOptions={{ initialFocus: () => nameRef.current }}>
+      <div className="fixed inset-0 flex items-center justify-center">
+        <div
+          ref={modalRef}
+          className={`fixed inset-0 bg-black transition-opacity duration-300 ${isAnimatingIn ? "opacity-50" : "opacity-0"}`}
+        ></div>
+        <div
+          className={`w-96 transform rounded bg-white p-6 shadow-lg transition-transform duration-300 ${
+            isAnimatingIn ? "scale-100" : "scale-0"
+          }`}
+        >
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-3xl">Add Event</h2>
+            <span className="text-2xl text-modal-date-header">
+              {convertDateForModal(selectedDate)}
+            </span>
+            <button
+              onClick={() =>
+                awaitAnimationBeforeClosing(modalRef, setIsAnimatingIn, onClose)
+              }
+              className="flex h-8 w-8 items-center justify-center rounded-full text-3xl hover:bg-today-button-bg-hover"
+            >
+              &#215;
+            </button>
           </div>
-
-          {/* All Day Checkbox */}
-          <div className="mb-4 flex">
-            <input
-              type="checkbox"
-              checked={allDay}
-              onChange={() => setAllDay((prev) => !prev)}
-            />
-            <label className="text-modal-form-label ml-2 text-sm font-medium">
-              All Day?
-            </label>
-          </div>
-
-          {/* Start Time and End Time */}
-          <div className="mb-4 flex justify-between gap-2">
-            <div className="w-full">
-              <label className="text-modal-form-label block text-sm font-medium">
-                Start Time
+          <form onSubmit={handleSubmit}>
+            {/* Event Name */}
+            <div className="mb-4">
+              <label
+                className="text-sm font-medium text-modal-form-label"
+                htmlFor="name"
+              >
+                Name
               </label>
               <input
-                type="time"
-                ref={startTimeRef}
+                type="text"
+                id="name"
+                ref={nameRef}
                 className="w-full rounded border p-2"
-                disabled={allDay} // Disabled if allDay is true
-                required={!allDay}
-                onChange={handleStartTimeChange}
+                required
               />
             </div>
-            <div className="w-full">
-              <label className="text-modal-form-label block text-sm font-medium">
-                End Time
-              </label>
-              <input
-                type="time"
-                ref={endTimeRef}
-                className="w-full rounded border p-2"
-                disabled={allDay} // Disabled if allDay is true
-                required={!allDay}
-                min={startTime || ""}
-              />
-            </div>
-          </div>
 
-          {/* Color Selection */}
-          <div className="mb-4">
-            <label className="text-modal-form-label text-sm font-medium">
-              Color
-            </label>
-            <div className="flex items-center gap-4">
-              {["red", "green", "blue"].map((color) => (
-                <label className="cursor-pointer" key={color}>
-                  <input
-                    type="radio"
-                    value={color}
-                    checked={selectedColor === color}
-                    onChange={() => setSelectedColor(color)}
-                    className="hidden"
-                  />
-                  <span
-                    className={`bg-custom-${color} block h-8 w-8 rounded-sm ${
-                      selectedColor === color ? "opacity-100" : "opacity-50"
-                    }`}
-                  ></span>
+            {/* All Day Checkbox */}
+            <div className="mb-4 flex">
+              <input
+                type="checkbox"
+                id="all-day"
+                checked={allDay}
+                onChange={() => setAllDay((prev) => !prev)}
+              />
+              <label
+                className="ml-2 text-sm font-medium text-modal-form-label"
+                htmlFor="all-day"
+              >
+                All Day?
+              </label>
+            </div>
+
+            {/* Start Time and End Time */}
+            <div className="mb-4 flex justify-between gap-2">
+              <div className="w-full">
+                <label
+                  className="block text-sm font-medium text-modal-form-label"
+                  htmlFor="start-time"
+                >
+                  Start Time
                 </label>
-              ))}
+                <input
+                  type="time"
+                  id="start-time"
+                  ref={startTimeRef}
+                  className="w-full rounded border p-2"
+                  disabled={allDay} // Disabled if allDay is true
+                  required={!allDay}
+                  onChange={handleStartTimeChange}
+                />
+              </div>
+              <div className="w-full">
+                <label
+                  className="block text-sm font-medium text-modal-form-label"
+                  htmlFor="end-time"
+                >
+                  End Time
+                </label>
+                <input
+                  type="time"
+                  id="end-time"
+                  ref={endTimeRef}
+                  className="w-full rounded border p-2"
+                  disabled={allDay} // Disabled if allDay is true
+                  required={!allDay}
+                  min={startTime || ""}
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="bg-add-button-bg text-add-button-text hover:bg-add-button-bg-hover border-add-button-border w-full rounded border py-2"
-          >
-            Add
-          </button>
-        </form>
+            {/* Color Selection */}
+            <div className="mb-4">
+              <label className="text-sm font-medium text-modal-form-label">
+                Color
+              </label>
+              <div className="flex items-center gap-4">
+                {["red", "green", "blue"].map((color) => (
+                  <label className="cursor-pointer" key={color}>
+                    <input
+                      type="radio"
+                      value={color}
+                      checked={selectedColor === color}
+                      onChange={() => setSelectedColor(color)}
+                      className="hidden"
+                    />
+                    <span
+                      tabIndex={0}
+                      className={`bg-custom-${color} block h-8 w-8 rounded-sm ${
+                        selectedColor === color ? "opacity-100" : "opacity-50"
+                      }`}
+                      onKeyDown={(e) => {
+                        if (e.key === " ") {
+                          setSelectedColor(color);
+                        }
+                      }}
+                    ></span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full rounded border border-add-button-border bg-add-button-bg py-2 text-add-button-text hover:bg-add-button-bg-hover"
+            >
+              Add
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </FocusTrap>
   );
 }

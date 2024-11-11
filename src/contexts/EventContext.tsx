@@ -24,9 +24,9 @@ type EventsByDate = {
 const EventContext = createContext<
   | {
       events: EventsByDate;
-      addEvent: (date: string | null, eventForm: EventForm) => void;
-      editEvent: (date: string | null, updatedEvent: EventForm) => void;
-      deleteEvent: (date: string | null, eventId: string | null) => void;
+      addEvent: (date: string, eventForm: EventForm) => void;
+      editEvent: (date: string, updatedEvent: EventForm) => void;
+      deleteEvent: (date: string, eventId: string) => void;
     }
   | undefined
 >(undefined);
@@ -45,22 +45,14 @@ export function EventProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(events));
   }, [events]);
 
-  function addEvent(date: string | null, eventForm: EventForm) {
-    if (date === null) {
-      throw new Error("No valid date string available for adding new event!");
-    }
-
+  function addEvent(date: string, eventForm: EventForm) {
     setEvents((prevEvents) => ({
       ...prevEvents,
       [date]: prevEvents[date] ? [...prevEvents[date], eventForm] : [eventForm],
     }));
   }
 
-  function editEvent(date: string | null, updatedEvent: EventForm) {
-    if (date === null) {
-      throw new Error("No valid date string available for editing event!");
-    }
-
+  function editEvent(date: string, updatedEvent: EventForm) {
     setEvents((prevEvents) => ({
       ...prevEvents,
       [date]: prevEvents[date]
@@ -71,14 +63,7 @@ export function EventProvider({ children }: { children: ReactNode }) {
     }));
   }
 
-  function deleteEvent(date: string | null, eventId: string | null) {
-    if (date === null) {
-      throw new Error("No valid date string available for deleting event!");
-    }
-    if (eventId === null) {
-      throw new Error("No valid event id available for deleting event!");
-    }
-
+  function deleteEvent(date: string, eventId: string) {
     setEvents((prevEvents) => {
       const filteredEvents = prevEvents[date].filter(
         (event) => event.id !== eventId,
