@@ -6,6 +6,7 @@ export default function Events({
   isHeaderCell,
   onClick,
   renderLimits,
+  eventRef,
 }: {
   eventsForDay: EventForm[];
   isHeaderCell: boolean;
@@ -16,6 +17,7 @@ export default function Events({
     withButton: number;
     headerWithButton: number;
   };
+  eventRef: React.MutableRefObject<HTMLButtonElement | null>;
 }) {
   const eventsForDaySorted = sortEvents(eventsForDay);
 
@@ -37,6 +39,7 @@ export default function Events({
           <button
             key={singleEvent.id}
             onClick={(event) => onClick(event, singleEvent.id)}
+            ref={eventRef}
             className="mb-2 w-full overflow-hidden whitespace-nowrap text-left"
           >
             <div className="flex items-center">

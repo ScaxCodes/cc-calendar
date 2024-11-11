@@ -5,6 +5,7 @@ export default function MoreEventsButton({
   isHeaderCell,
   onClick,
   renderLimits,
+  moreButtonRef,
 }: {
   eventsForDay: EventForm[];
   isHeaderCell: boolean;
@@ -15,6 +16,7 @@ export default function MoreEventsButton({
     withButton: number;
     headerWithButton: number;
   };
+  moreButtonRef: React.MutableRefObject<HTMLButtonElement | null>;
 }) {
   let renderLimit = isHeaderCell ? renderLimits.header : renderLimits.normal;
   const eventsAreHidden = eventsForDay.length - renderLimit > 0;
@@ -28,7 +30,7 @@ export default function MoreEventsButton({
     const numberOfHiddenEvents = eventsForDay.length - renderLimit;
 
     return (
-      <button className="text-xs font-bold" onClick={onClick}>
+      <button ref={moreButtonRef} className="text-xs font-bold" onClick={onClick}>
         +{numberOfHiddenEvents} More
       </button>
     );

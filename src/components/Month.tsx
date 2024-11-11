@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import {
   format,
   startOfMonth,
@@ -19,6 +18,8 @@ import { AddEventButton } from "./AddEventButton";
 import { DayName } from "./DayName";
 import { DayNumber } from "./DayNumber";
 import { useEventRendering } from "../hooks/useEventRendering";
+import { useDayCellHeights } from "../hooks/useDayCellHeights";
+
 
 export function Month({
   currentMonth,
@@ -53,10 +54,10 @@ export function Month({
     setIsMoreEventsModalOpen,
   } = useUI();
   const { events } = useEvents();
+  const { heights, refs } = useDayCellHeights(); // Use the custom hook
 
   // Create a ref for a single day cell to measure
-  const measureDayRef = useRef<HTMLDivElement>(null);
-  const renderLimits = useEventRendering(measureDayRef);
+  const renderLimits = useEventRendering(refs.dayCell);
 
   function handleAddEvent(event: React.MouseEvent<HTMLButtonElement>) {
     const date = event.currentTarget.parentElement?.getAttribute("data-date");
@@ -106,7 +107,7 @@ export function Month({
 
           return (
             <div
-              ref={index === 0 ? measureDayRef : null} // Only need to measure one cell
+              ref={index === 0 ? refs.dayCell : null} // Only need to measure one cell
               key={index}
               className={`group relative flex flex-col items-center border p-1 text-center ${backgroundClass} ${opacityClass} min-h-[100px] overflow-hidden`}
               style={{
@@ -114,15 +115,16 @@ export function Month({
               }}
               data-date={dayISO}
             >
-              <DayName index={index} day={day} />
+              <DayName index={index} day={day} dayNameRef={refs.dayName} />
               <AddEventButton onClick={handleAddEvent} />
-              <DayNumber todayHighlightClass={todayHighlightClass} day={day} />
+              <DayNumber todayHighlightClass={todayHighlightClass} day={day} dayNumberRef={refs.dayNumber} />
               {eventsForDay && (
                 <Events
                   eventsForDay={eventsForDay}
                   isHeaderCell={index <= 6}
                   onClick={handleEditEvent}
                   renderLimits={renderLimits}
+                  eventRef={refs.event}
                 />
               )}
               {/* Dynamic-growing-spacer between events and more-events-button */}
@@ -133,6 +135,7 @@ export function Month({
                   isHeaderCell={index <= 6}
                   onClick={handleOpenMoreEventsModal}
                   renderLimits={renderLimits}
+                  moreButtonRef={refs.moreButton}
                 />
               )}
             </div>
