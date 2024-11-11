@@ -19,7 +19,7 @@ export function Calendar() {
   } = useUI();
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const { headerHeight, headerRef } = useHeaderHeight(); // Use the custom hook
+  const { headerHeight, headerRef } = useHeaderHeight(); 
 
   function handleCloseAddEventModal() {
     setSelectedDate(null);
