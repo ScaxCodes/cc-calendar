@@ -30,7 +30,7 @@ export default function MoreEventsButton({
     const numberOfHiddenEvents = eventsForDay.length - renderLimit;
 
     return (
-      <button ref={moreButtonRef} className="text-xs font-bold" onClick={onClick}>
+      <button ref={moreButtonRef} className="text-[9px] sm:text-xs font-bold" onClick={onClick}>
         +{numberOfHiddenEvents} More
       </button>
     );

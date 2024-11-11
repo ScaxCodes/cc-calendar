@@ -54,9 +54,9 @@ export function Month({
     setIsMoreEventsModalOpen,
   } = useUI();
   const { events } = useEvents();
-  const { heights, refs } = useDayCellHeights();
+  const { refs } = useDayCellHeights();
 
-  const renderLimits = useEventRendering(refs.dayCell, heights);
+  const renderLimits = useEventRendering(refs.dayCell);
 
   function handleAddEvent(event: React.MouseEvent<HTMLButtonElement>) {
     const date = event.currentTarget.parentElement?.getAttribute("data-date");

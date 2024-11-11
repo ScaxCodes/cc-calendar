@@ -34,12 +34,12 @@ export default function Events({
 
   return (
     <>
-      {eventsToRender.map((singleEvent) => {
+      {eventsToRender.map((singleEvent, index) => {
         return (
           <button
             key={singleEvent.id}
             onClick={(event) => onClick(event, singleEvent.id)}
-            ref={eventRef}
+            ref={index === 0 ? eventRef : undefined}
             className="mb-2 w-full overflow-hidden whitespace-nowrap text-left"
           >
             <div className="flex items-center">
