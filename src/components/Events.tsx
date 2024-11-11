@@ -1,35 +1,31 @@
 import { EventForm } from "../contexts/EventContext";
-import { useUI } from "../contexts/UIContext";
 import { sortEvents } from "../utils/sortEvents";
 
 export default function Events({
   eventsForDay,
   isHeaderCell,
   onClick,
+  renderLimits,
 }: {
   eventsForDay: EventForm[];
   isHeaderCell: boolean;
   onClick: (event: React.MouseEvent<HTMLButtonElement>, id: string) => void;
+  renderLimits: {
+    normal: number;
+    header: number;
+    withButton: number;
+    headerWithButton: number;
+  };
 }) {
-  const {
-    amountEventsToRender,
-    amountEventsToRenderForHeader,
-    amountEventsToRenderIfButtonVisible,
-    amountEventsToRenderIfButtonVisibleForHeader,
-  } = useUI();
-
   const eventsForDaySorted = sortEvents(eventsForDay);
 
-  let renderLimit = isHeaderCell
-    ? amountEventsToRenderForHeader
-    : amountEventsToRender;
-
+  let renderLimit = isHeaderCell ? renderLimits.header : renderLimits.normal;
   const eventsAreHidden = eventsForDay.length - renderLimit > 0;
 
   if (eventsAreHidden) {
-    renderLimit = isHeaderCell
-      ? amountEventsToRenderIfButtonVisibleForHeader
-      : amountEventsToRenderIfButtonVisible;
+    renderLimit = isHeaderCell 
+      ? renderLimits.headerWithButton 
+      : renderLimits.withButton;
   }
 
   const eventsToRender = eventsForDaySorted.slice(0, renderLimit);

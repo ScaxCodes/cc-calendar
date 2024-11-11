@@ -1,33 +1,29 @@
 import { EventForm } from "../contexts/EventContext";
-import { useUI } from "../contexts/UIContext";
 
 export default function MoreEventsButton({
   eventsForDay,
   isHeaderCell,
   onClick,
+  renderLimits,
 }: {
   eventsForDay: EventForm[];
   isHeaderCell: boolean;
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  renderLimits: {
+    normal: number;
+    header: number;
+    withButton: number;
+    headerWithButton: number;
+  };
 }) {
-  const {
-    amountEventsToRender,
-    amountEventsToRenderForHeader,
-    amountEventsToRenderIfButtonVisible,
-    amountEventsToRenderIfButtonVisibleForHeader,
-  } = useUI();
-
-  let renderLimit = isHeaderCell
-    ? amountEventsToRenderForHeader
-    : amountEventsToRender;
-
+  let renderLimit = isHeaderCell ? renderLimits.header : renderLimits.normal;
   const eventsAreHidden = eventsForDay.length - renderLimit > 0;
 
-  // Only render buttons if there are events to hide
+  // Only render button if there are events to hide
   if (eventsAreHidden) {
     renderLimit = isHeaderCell
-      ? amountEventsToRenderIfButtonVisibleForHeader
-      : amountEventsToRenderIfButtonVisible;
+      ? renderLimits.headerWithButton
+      : renderLimits.withButton;
 
     const numberOfHiddenEvents = eventsForDay.length - renderLimit;
 
@@ -37,4 +33,6 @@ export default function MoreEventsButton({
       </button>
     );
   }
+
+  return null;
 }

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useRef } from "react";
 import {
   format,
   startOfMonth,
@@ -18,14 +18,7 @@ import MoreEventsButton from "./MoreEventsButton";
 import { AddEventButton } from "./AddEventButton";
 import { DayName } from "./DayName";
 import { DayNumber } from "./DayNumber";
-
-// Constants for size-calculation of day-cell & dynamic "+X More" button
-const PADDING_CONTAINER = 8;
-const BORDER_CONTAINER = 2;
-const DAY_NAME_HEIGHT = 16;
-const DAY_NUMBER_HEIGHT = 24 + 4;
-const EVENT_HEIGHT = 32;
-const MORE_BUTTON_HEIGHT = 16;
+import { useEventRendering } from "../hooks/useEventRendering";
 
 export function Month({
   currentMonth,
@@ -58,50 +51,12 @@ export function Month({
     setSelectedDate,
     setSelectedEventId,
     setIsMoreEventsModalOpen,
-    setAmountEventsToRender,
-    setAmountEventsToRenderForHeader,
-    setAmountEventsToRenderIfButtonVisible,
-    setAmountEventsToRenderIfButtonVisibleForHeader,
   } = useUI();
   const { events } = useEvents();
 
-  // Create an array of refs for the day-cells
-  const dayDivRefs = useRef<Array<HTMLDivElement | null>>([]);
-
-  function calculateFittingEvents() {
-    if (dayDivRefs.current[0]?.clientHeight === undefined) return;
-    const height = dayDivRefs.current[0]?.clientHeight;
-
-    const availableSpaceForEvents =
-      height - BORDER_CONTAINER - PADDING_CONTAINER - DAY_NUMBER_HEIGHT;
-
-    setAmountEventsToRender(Math.floor(availableSpaceForEvents / EVENT_HEIGHT));
-    setAmountEventsToRenderForHeader(
-      Math.floor((availableSpaceForEvents - DAY_NAME_HEIGHT) / EVENT_HEIGHT),
-    );
-    setAmountEventsToRenderIfButtonVisible(
-      Math.floor((availableSpaceForEvents - MORE_BUTTON_HEIGHT) / EVENT_HEIGHT),
-    );
-    setAmountEventsToRenderIfButtonVisibleForHeader(
-      Math.floor(
-        (availableSpaceForEvents - MORE_BUTTON_HEIGHT - DAY_NAME_HEIGHT) /
-          EVENT_HEIGHT,
-      ),
-    );
-  }
-
-  // Check on mount, on events change, and on window resize
-  // Used useLayoutEffect to avoid flashing events or buttons
-  useLayoutEffect(() => {
-    calculateFittingEvents();
-
-    window.addEventListener("resize", calculateFittingEvents);
-
-    return () => {
-      window.removeEventListener("resize", calculateFittingEvents);
-    };
-  }); // No dependency array to trigger on every render (instead of adding [events])
-  // Without this change the initial render without manual resizing was buggy
+  // Create a ref for a single day cell to measure
+  const measureDayRef = useRef<HTMLDivElement>(null);
+  const renderLimits = useEventRendering(measureDayRef);
 
   function handleAddEvent(event: React.MouseEvent<HTMLButtonElement>) {
     const date = event.currentTarget.parentElement?.getAttribute("data-date");
@@ -151,7 +106,7 @@ export function Month({
 
           return (
             <div
-              ref={(el) => (dayDivRefs.current[index] = el)} // Assign a unique ref for each day-cell
+              ref={index === 0 ? measureDayRef : null} // Only need to measure one cell
               key={index}
               className={`group relative flex flex-col items-center border p-1 text-center ${backgroundClass} ${opacityClass} min-h-[100px] overflow-hidden`}
               style={{
@@ -167,6 +122,7 @@ export function Month({
                   eventsForDay={eventsForDay}
                   isHeaderCell={index <= 6}
                   onClick={handleEditEvent}
+                  renderLimits={renderLimits}
                 />
               )}
               {/* Dynamic-growing-spacer between events and more-events-button */}
@@ -176,6 +132,7 @@ export function Month({
                   eventsForDay={eventsForDay}
                   isHeaderCell={index <= 6}
                   onClick={handleOpenMoreEventsModal}
+                  renderLimits={renderLimits}
                 />
               )}
             </div>

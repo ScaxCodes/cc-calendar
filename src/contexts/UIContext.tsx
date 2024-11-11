@@ -8,20 +8,6 @@ type UIContextType = {
   setSelectedEventId: React.Dispatch<React.SetStateAction<string | null>>;
   isMoreEventsModalOpen: boolean;
   setIsMoreEventsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  amountEventsToRender: number;
-  setAmountEventsToRender: React.Dispatch<React.SetStateAction<number>>;
-  amountEventsToRenderForHeader: number;
-  setAmountEventsToRenderForHeader: React.Dispatch<
-    React.SetStateAction<number>
-  >;
-  amountEventsToRenderIfButtonVisible: number;
-  setAmountEventsToRenderIfButtonVisible: React.Dispatch<
-    React.SetStateAction<number>
-  >;
-  amountEventsToRenderIfButtonVisibleForHeader: number;
-  setAmountEventsToRenderIfButtonVisibleForHeader: React.Dispatch<
-    React.SetStateAction<number>
-  >;
 };
 
 // Context setup
@@ -31,17 +17,6 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [isMoreEventsModalOpen, setIsMoreEventsModalOpen] = useState(false);
-  const [amountEventsToRender, setAmountEventsToRender] = useState<number>(0);
-  const [amountEventsToRenderForHeader, setAmountEventsToRenderForHeader] =
-    useState<number>(0);
-  const [
-    amountEventsToRenderIfButtonVisible,
-    setAmountEventsToRenderIfButtonVisible,
-  ] = useState<number>(0);
-  const [
-    amountEventsToRenderIfButtonVisibleForHeader,
-    setAmountEventsToRenderIfButtonVisibleForHeader,
-  ] = useState<number>(0);
 
   return (
     <UIContext.Provider
@@ -52,14 +27,6 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
         setSelectedEventId,
         isMoreEventsModalOpen,
         setIsMoreEventsModalOpen,
-        amountEventsToRender,
-        setAmountEventsToRender,
-        amountEventsToRenderForHeader,
-        setAmountEventsToRenderForHeader,
-        amountEventsToRenderIfButtonVisible,
-        setAmountEventsToRenderIfButtonVisible,
-        amountEventsToRenderIfButtonVisibleForHeader,
-        setAmountEventsToRenderIfButtonVisibleForHeader,
       }}
     >
       {children}
