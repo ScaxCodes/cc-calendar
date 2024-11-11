@@ -61,7 +61,14 @@ export function useEventRendering(
     return () => {
       resizeObserver.disconnect();
     };
-  }, [heights.dayName.current, heights.dayNumber.current, heights.event.current, heights.moreButton.current, heights.dayCellPaddingAndBorder.current]);
+  }, [
+    dayRef,
+    heights.dayName,
+    heights.dayNumber,
+    heights.event,
+    heights.moreButton,
+    heights.dayCellPaddingAndBorder
+  ]);
 
   return renderLimits;
 } 

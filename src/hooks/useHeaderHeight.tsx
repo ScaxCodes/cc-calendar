@@ -18,7 +18,7 @@ export function useHeaderHeight() {
         headerRef.current.clientHeight + marginTop + marginBottom,
       );
     }
-  });
+  }, []);
 
   return { headerHeight, headerRef };
 }

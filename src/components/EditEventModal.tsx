@@ -9,11 +9,10 @@ import FocusTrap from "focus-trap-react";
 export function EditEventModal({ onClose }: { onClose: () => void }) {
   const { events, editEvent, deleteEvent } = useEvents();
   const { selectedDate, selectedEventId } = useUI();
-  if (selectedDate === null) return;
 
   // Default value [] needed for empty fade-out-modal after deletion of an event
   const [selectedEvent] =
-    events[selectedDate]?.filter((event) => event.id === selectedEventId) || [];
+    (selectedDate ? events[selectedDate]?.filter((event) => event.id === selectedEventId) : undefined) || [];
 
   // Using useRef for fields that don't need to trigger re-renders
   const nameRef = useRef<HTMLInputElement>(null);
