@@ -48,7 +48,6 @@ export function useDayCellHeights() {
       heights.dayCellPaddingAndBorder.current =
         borderTop + borderBottom + paddingTop + paddingBottom;
     }
-    console.log("Elements Heights: ", heights);
   }, [
     refs.dayName.current?.clientHeight,
     refs.dayNumber.current?.clientHeight,

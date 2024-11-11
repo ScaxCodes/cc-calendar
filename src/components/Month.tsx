@@ -54,10 +54,9 @@ export function Month({
     setIsMoreEventsModalOpen,
   } = useUI();
   const { events } = useEvents();
-  const { heights, refs } = useDayCellHeights(); // Use the custom hook
+  const { heights, refs } = useDayCellHeights();
 
-  // Create a ref for a single day cell to measure
-  const renderLimits = useEventRendering(refs.dayCell);
+  const renderLimits = useEventRendering(refs.dayCell, heights);
 
   function handleAddEvent(event: React.MouseEvent<HTMLButtonElement>) {
     const date = event.currentTarget.parentElement?.getAttribute("data-date");
